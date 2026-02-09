@@ -1,0 +1,1167 @@
+{
+  "satellites": [
+    {
+      "id": "CHIRPS_DAILY",
+      "name": "CHIRPS Daily",
+      "ee_collection_name": "UCSB-CHG/CHIRPS/DAILY",
+      "description": "Climate Hazards Center InfraRed Precipitation with Station data (CHIRPS) is a 30+ year quasi-global rainfall dataset.",
+      "website": "https://developers.google.com/earth-engine/datasets/catalog/UCSB-CHG_CHIRPS_DAILY",
+      "startDate": "1981-01-01",
+      "pixelSize": 5566,
+      "bands": [
+        {
+          "name": "precipitation",
+          "units": "mm/d",
+          "min": 0,
+          "max": 1444.34,
+          "description": "Precipitation"
+        }
+      ]
+    },
+    {
+      "id": "MODIS_MOD13Q1_061",
+      "name": "MODIS MOD13Q1 v6.1 (16-Day)",
+      "ee_collection_name": "MODIS/061/MOD13Q1",
+      "description": "The MOD13Q1 V6.1 product provides a Vegetation Index (VI) value at a per pixel basis, including NDVI and EVI, computed from atmospherically corrected bi-directional surface reflectances.",
+      "website": "https://developers.google.com/earth-engine/datasets/catalog/MODIS_061_MOD13Q1",
+      "startDate": "2000-02-18",
+      "pixelSize": 250,
+      "bands": [
+        {
+          "name": "NDVI",
+          "units": "scaled value",
+          "min": -2000,
+          "max": 10000,
+          "description": "Normalized Difference Vegetation Index (Scale: 0.0001)"
+        },
+        {
+          "name": "EVI",
+          "units": "scaled value",
+          "min": -2000,
+          "max": 10000,
+          "description": "Enhanced Vegetation Index (Scale: 0.0001)"
+        },
+        {
+          "name": "DetailedQA",
+          "units": "bitmask",
+          "min": 0,
+          "max": 65535,
+          "description": "VI quality indicators"
+        }
+      ]
+    },
+    {
+      "id": "ERA5_LAND_HOURLY",
+      "name": "ERA5-Land Hourly",
+      "ee_collection_name": "ECMWF/ERA5_LAND/HOURLY",
+      "description": "ERA5-Land is a reanalysis dataset providing a consistent view of the evolution of land variables over several decades at an enhanced resolution compared to ERA5.",
+      "website": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_HOURLY",
+      "startDate": "1950-01-01",
+      "pixelSize": 11132,
+      "bands": [
+        {
+          "name": "dewpoint_temperature_2m",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Temperature to which the air, at 2 meters above the surface of the Earth, would have to be cooled for saturation to occur. It is a measure of the humidity of the air."
+        },
+        {
+          "name": "temperature_2m",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Temperature of air at 2m above the surface of land, sea or in-land waters."
+        },
+        {
+          "name": "skin_temperature",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Temperature of the surface of the Earth. It represents the temperature of the uppermost surface layer, which has no heat capacity and so can respond instantaneously to changes in surface fluxes."
+        },
+        {
+          "name": "soil_temperature_level_1",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Temperature of the soil in layer 1 (0 - 7 cm)."
+        },
+        {
+          "name": "soil_temperature_level_2",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Temperature of the soil in layer 2 (7-28 cm)."
+        },
+        {
+          "name": "soil_temperature_level_3",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Temperature of the soil in layer 3 (28-100 cm)."
+        },
+        {
+          "name": "soil_temperature_level_4",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Temperature of the soil in layer 4 (100-289 cm)."
+        },
+        {
+          "name": "lake_bottom_temperature",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Temperature of water at the bottom of inland water bodies (lakes, reservoirs, rivers) and coastal waters."
+        },
+        {
+          "name": "lake_ice_depth",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "The thickness of ice on inland water bodies (lakes, reservoirs and rivers) and coastal waters."
+        },
+        {
+          "name": "lake_ice_temperature",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "The temperature of the uppermost surface of ice on inland water bodies (lakes, reservoirs, rivers) and coastal waters."
+        },
+        {
+          "name": "lake_mix_layer_depth",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "The thickness of the upper most layer of an inland water body that is well mixed and has a near constant temperature with depth."
+        },
+        {
+          "name": "lake_mix_layer_temperature",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "The temperature of the upper most layer of inland water bodies (lakes, reservoirs and rivers) or coastal waters) that is well mixed."
+        },
+        {
+          "name": "lake_shape_factor",
+          "units": "",
+          "min": 0,
+          "max": 0,
+          "description": "Describes the way that temperature changes with depth in the thermocline layer of inland water bodies."
+        },
+        {
+          "name": "lake_total_layer_temperature",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "The mean temperature of total water column in inland water bodies (lakes, reservoirs and rivers) and coastal waters."
+        },
+        {
+          "name": "snow_albedo",
+          "units": "",
+          "min": 0,
+          "max": 0,
+          "description": "Fraction of solar (shortwave) radiation reflected by the snow, for both direct and diffuse radiation. Values vary between 0 and 1."
+        },
+        {
+          "name": "snow_cover",
+          "units": "",
+          "min": 0,
+          "max": 0,
+          "description": "Represents the fraction (0-1) of the cell / grid-box occupied by snow."
+        },
+        {
+          "name": "snow_density",
+          "units": "kg/m^3",
+          "min": 0,
+          "max": 0,
+          "description": "Mass of snow per cubic meter in the snow layer."
+        },
+        {
+          "name": "snow_depth",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Instantaneous grid-box average of the snow thickness on the ground (excluding snow on canopy)."
+        },
+        {
+          "name": "snow_depth_water_equivalent",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Depth of snow from the snow-covered area of a grid box, in meters of water equivalent."
+        },
+        {
+          "name": "snowfall",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Accumulated total snow that has fallen to the Earth's surface."
+        },
+        {
+          "name": "snowmelt",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Melting of snow averaged over the grid box."
+        },
+        {
+          "name": "temperature_of_snow_layer",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Gives the temperature of the snow layer from the ground to the snow-air interface."
+        },
+        {
+          "name": "skin_reservoir_content",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of water in the vegetation canopy and/or in a thin layer on the soil."
+        },
+        {
+          "name": "volumetric_soil_water_layer_1",
+          "units": "Volume fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Volume of water in soil layer 1 (0 - 7 cm)."
+        },
+        {
+          "name": "volumetric_soil_water_layer_2",
+          "units": "Volume fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Volume of water in soil layer 2 (7 -28 cm)."
+        },
+        {
+          "name": "volumetric_soil_water_layer_3",
+          "units": "Volume fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Volume of water in soil layer 3 (28 - 100 cm)."
+        },
+        {
+          "name": "volumetric_soil_water_layer_4",
+          "units": "Volume fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Volume of water in soil layer 4 (100 - 289 cm)."
+        },
+        {
+          "name": "forecast_albedo",
+          "units": "",
+          "min": 0,
+          "max": 0,
+          "description": "Forecast surface albedo."
+        },
+        {
+          "name": "surface_latent_heat_flux",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of energy going from the surface to the air through evaporation, integrated over the period specified."
+        },
+        {
+          "name": "surface_net_solar_radiation",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of solar radiation (shortwave) reaching the surface of the Earth (both direct and diffuse) minus the amount reflected by the Earth's surface, integrated over the period specified."
+        },
+        {
+          "name": "surface_net_thermal_radiation",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of thermal radiation (longwave) emitted from the Earth's surface minus the amount of thermal radiation emitted by the atmosphere and absorbed by the surface, integrated over the period specified."
+        },
+        {
+          "name": "surface_sensible_heat_flux",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Transfer of heat between the Earth's surface and the atmosphere through the effects of turbulent air motion, integrated over the period specified."
+        },
+        {
+          "name": "surface_solar_radiation_downwards",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of solar radiation (shortwave) reaching the surface of the Earth (both direct and diffuse), integrated over the period specified."
+        },
+        {
+          "name": "surface_thermal_radiation_downwards",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of thermal radiation (longwave) emitted by the atmosphere and absorbed by the Earth's surface, integrated over the period specified."
+        },
+        {
+          "name": "evaporation_from_bare_soil",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of evaporation from bare soil at the top of the land surface, integrated over the period specified."
+        },
+        {
+          "name": "evaporation_from_open_water_surfaces_excluding_oceans",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of evaporation from open water surfaces (lakes, reservoirs, rivers, wetlands), integrated over the period specified."
+        },
+        {
+          "name": "evaporation_from_the_top_of_canopy",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of evaporation from the canopy interception reservoir, integrated over the period specified."
+        },
+        {
+          "name": "evaporation_from_vegetation_transpiration",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of evapotranspiration from vegetation, integrated over the period specified."
+        },
+        {
+          "name": "potential_evaporation",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of evaporation that would occur from a vegetation canopy for the given atmospheric conditions, assuming ideal conditions, integrated over the period specified."
+        },
+        {
+          "name": "runoff",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of water accumulated at the surface that exceeds the infiltration capacity of the soil and does not evaporate (includes both surface and sub-surface runoff), integrated over the period specified."
+        },
+        {
+          "name": "snow_evaporation",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of evaporation from the snow surface, integrated over the period specified."
+        },
+        {
+          "name": "sub_surface_runoff",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of water draining through the soil and accumulating at the base of the soil column, integrated over the period specified."
+        },
+        {
+          "name": "surface_runoff",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of water accumulated at the surface that exceeds the infiltration capacity of the soil and does not evaporate, integrated over the period specified."
+        },
+        {
+          "name": "total_evaporation",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Amount of evaporation and transpiration from the Earth's surface and vegetation, integrated over the period specified."
+        },
+        {
+          "name": "u_component_of_wind_10m",
+          "units": "m/s",
+          "min": 0,
+          "max": 0,
+          "description": "Eastward component of the 10m wind. It is the horizontal speed of air moving towards the east."
+        },
+        {
+          "name": "v_component_of_wind_10m",
+          "units": "m/s",
+          "min": 0,
+          "max": 0,
+          "description": "Northward component of the 10m wind. It is the horizontal speed of air moving towards the north."
+        },
+        {
+          "name": "surface_pressure",
+          "units": "Pa",
+          "min": 0,
+          "max": 0,
+          "description": "Pressure (force per unit area) of the atmosphere on the surface of land, sea and in-land water. It is a measure of the weight of all the air in a column vertically above the point of measurement."
+        },
+        {
+          "name": "total_precipitation",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Total precipitation (rain and snow) integrated over the period specified."
+        },
+        {
+          "name": "leaf_area_index_high_vegetation",
+          "units": "Area fraction",
+          "min": 0,
+          "max": 0,
+          "description": "One half of the total green leaf area per unit horizontal ground surface area for high vegetation type."
+        },
+        {
+          "name": "leaf_area_index_low_vegetation",
+          "units": "Area fraction",
+          "min": 0,
+          "max": 0,
+          "description": "One half of the total green leaf area per unit horizontal ground surface area for low vegetation type."
+        },
+        {
+          "name": "dewpoint_temperature_2m_min",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum dewpoint_temperature_2m value"
+        },
+        {
+          "name": "dewpoint_temperature_2m_max",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum dewpoint_temperature_2m value"
+        },
+        {
+          "name": "temperature_2m_min",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum temperature_2m value"
+        },
+        {
+          "name": "temperature_2m_max",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum temperature_2m value"
+        },
+        {
+          "name": "skin_temperature_min",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum skin_temperature value"
+        },
+        {
+          "name": "skin_temperature_max",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum skin_temperature value"
+        },
+        {
+          "name": "soil_temperature_level_1_min",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum soil_temperature_level_1 value"
+        },
+        {
+          "name": "soil_temperature_level_1_max",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum soil_temperature_level_1 value"
+        },
+        {
+          "name": "soil_temperature_level_2_min",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum soil_temperature_level_2 value"
+        },
+        {
+          "name": "soil_temperature_level_2_max",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum soil_temperature_level_2 value"
+        },
+        {
+          "name": "soil_temperature_level_3_min",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum soil_temperature_level_3 value"
+        },
+        {
+          "name": "soil_temperature_level_3_max",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum soil_temperature_level_3 value"
+        },
+        {
+          "name": "soil_temperature_level_4_min",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum soil_temperature_level_4 value"
+        },
+        {
+          "name": "soil_temperature_level_4_max",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum soil_temperature_level_4 value"
+        },
+        {
+          "name": "lake_bottom_temperature_min",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum lake_bottom_temperature value"
+        },
+        {
+          "name": "lake_bottom_temperature_max",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum lake_bottom_temperature value"
+        },
+        {
+          "name": "lake_ice_depth_min",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum lake_ice_depth value"
+        },
+        {
+          "name": "lake_ice_depth_max",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum lake_ice_depth value"
+        },
+        {
+          "name": "lake_ice_temperature_min",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum lake_ice_temperature value"
+        },
+        {
+          "name": "lake_ice_temperature_max",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum lake_ice_temperature value"
+        },
+        {
+          "name": "lake_mix_layer_depth_min",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum lake_mix_layer_depth value"
+        },
+        {
+          "name": "lake_mix_layer_depth_max",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum lake_mix_layer_depth value"
+        },
+        {
+          "name": "lake_mix_layer_temperature_min",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum lake_mix_layer_temperature value"
+        },
+        {
+          "name": "lake_mix_layer_temperature_max",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum lake_mix_layer_temperature value"
+        },
+        {
+          "name": "lake_shape_factor_min",
+          "units": "",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum lake_shape_factor value"
+        },
+        {
+          "name": "lake_shape_factor_max",
+          "units": "",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum lake_shape_factor value"
+        },
+        {
+          "name": "lake_total_layer_temperature_min",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum lake_total_layer_temperature value"
+        },
+        {
+          "name": "lake_total_layer_temperature_max",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum lake_total_layer_temperature value"
+        },
+        {
+          "name": "snow_albedo_min",
+          "units": "",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum snow_albedo value"
+        },
+        {
+          "name": "snow_albedo_max",
+          "units": "",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum snow_albedo value"
+        },
+        {
+          "name": "snow_cover_min",
+          "units": "",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum snow_cover value"
+        },
+        {
+          "name": "snow_cover_max",
+          "units": "",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum snow_cover value"
+        },
+        {
+          "name": "snow_density_min",
+          "units": "kg/m^3",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum snow_density value"
+        },
+        {
+          "name": "snow_density_max",
+          "units": "kg/m^3",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum snow_density value"
+        },
+        {
+          "name": "snow_depth_min",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum snow_depth value"
+        },
+        {
+          "name": "snow_depth_max",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum snow_depth value"
+        },
+        {
+          "name": "snow_depth_water_equivalent_min",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum snow_depth_water_equivalent value"
+        },
+        {
+          "name": "snow_depth_water_equivalent_max",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum snow_depth_water_equivalent value"
+        },
+        {
+          "name": "snowfall_min",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum snowfall value"
+        },
+        {
+          "name": "snowfall_max",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum snowfall value"
+        },
+        {
+          "name": "snowmelt_min",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum snowmelt value"
+        },
+        {
+          "name": "snowmelt_max",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum snowmelt value"
+        },
+        {
+          "name": "temperature_of_snow_layer_min",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum temperature_of_snow_layer value"
+        },
+        {
+          "name": "temperature_of_snow_layer_max",
+          "units": "K",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum temperature_of_snow_layer value"
+        },
+        {
+          "name": "skin_reservoir_content_min",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum skin_reservoir_content value"
+        },
+        {
+          "name": "skin_reservoir_content_max",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum skin_reservoir_content value"
+        },
+        {
+          "name": "volumetric_soil_water_layer_1_min",
+          "units": "Volume fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum volumetric_soil_water_layer_1 value"
+        },
+        {
+          "name": "volumetric_soil_water_layer_1_max",
+          "units": "Volume fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum volumetric_soil_water_layer_1 value"
+        },
+        {
+          "name": "volumetric_soil_water_layer_2_min",
+          "units": "Volume fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum volumetric_soil_water_layer_2 value"
+        },
+        {
+          "name": "volumetric_soil_water_layer_2_max",
+          "units": "Volume fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum volumetric_soil_water_layer_2 value"
+        },
+        {
+          "name": "volumetric_soil_water_layer_3_min",
+          "units": "Volume fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum volumetric_soil_water_layer_3 value"
+        },
+        {
+          "name": "volumetric_soil_water_layer_3_max",
+          "units": "Volume fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum volumetric_soil_water_layer_3 value"
+        },
+        {
+          "name": "volumetric_soil_water_layer_4_min",
+          "units": "Volume fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum volumetric_soil_water_layer_4 value"
+        },
+        {
+          "name": "volumetric_soil_water_layer_4_max",
+          "units": "Volume fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum volumetric_soil_water_layer_4 value"
+        },
+        {
+          "name": "forecast_albedo_min",
+          "units": "",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum forecast_albedo value"
+        },
+        {
+          "name": "forecast_albedo_max",
+          "units": "",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum forecast_albedo value"
+        },
+        {
+          "name": "surface_latent_heat_flux_min",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum surface_latent_heat_flux value"
+        },
+        {
+          "name": "surface_latent_heat_flux_max",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum surface_latent_heat_flux value"
+        },
+        {
+          "name": "surface_net_solar_radiation_min",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum surface_net_solar_radiation value"
+        },
+        {
+          "name": "surface_net_solar_radiation_max",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum surface_net_solar_radiation value"
+        },
+        {
+          "name": "surface_net_thermal_radiation_min",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum surface_net_thermal_radiation value"
+        },
+        {
+          "name": "surface_net_thermal_radiation_max",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum surface_net_thermal_radiation value"
+        },
+        {
+          "name": "surface_sensible_heat_flux_min",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum surface_sensible_heat_flux value"
+        },
+        {
+          "name": "surface_sensible_heat_flux_max",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum surface_sensible_heat_flux value"
+        },
+        {
+          "name": "surface_solar_radiation_downwards_min",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum surface_solar_radiation_downwards value"
+        },
+        {
+          "name": "surface_solar_radiation_downwards_max",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum surface_solar_radiation_downwards value"
+        },
+        {
+          "name": "surface_thermal_radiation_downwards_min",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum surface_thermal_radiation_downwards value"
+        },
+        {
+          "name": "surface_thermal_radiation_downwards_max",
+          "units": "J/m^2",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum surface_thermal_radiation_downwards value"
+        },
+        {
+          "name": "evaporation_from_bare_soil_min",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum evaporation_from_bare_soil value"
+        },
+        {
+          "name": "evaporation_from_bare_soil_max",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum evaporation_from_bare_soil value"
+        },
+        {
+          "name": "evaporation_from_open_water_surfaces_excluding_oceans_min",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum evaporation_from_open_water_surfaces_excluding_oceans value"
+        },
+        {
+          "name": "evaporation_from_open_water_surfaces_excluding_oceans_max",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum evaporation_from_open_water_surfaces_excluding_oceans value"
+        },
+        {
+          "name": "evaporation_from_the_top_of_canopy_min",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum evaporation_from_the_top_of_canopy value"
+        },
+        {
+          "name": "evaporation_from_the_top_of_canopy_max",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum evaporation_from_the_top_of_canopy value"
+        },
+        {
+          "name": "evaporation_from_vegetation_transpiration_min",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum evaporation_from_vegetation_transpiration value"
+        },
+        {
+          "name": "evaporation_from_vegetation_transpiration_max",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum evaporation_from_vegetation_transpiration value"
+        },
+        {
+          "name": "potential_evaporation_min",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum potential_evaporation value"
+        },
+        {
+          "name": "potential_evaporation_max",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum potential_evaporation value"
+        },
+        {
+          "name": "runoff_min",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum runoff value"
+        },
+        {
+          "name": "runoff_max",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum runoff value"
+        },
+        {
+          "name": "snow_evaporation_min",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum snow_evaporation value"
+        },
+        {
+          "name": "snow_evaporation_max",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum snow_evaporation value"
+        },
+        {
+          "name": "sub_surface_runoff_min",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum sub_surface_runoff value"
+        },
+        {
+          "name": "sub_surface_runoff_max",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum sub_surface_runoff value"
+        },
+        {
+          "name": "surface_runoff_min",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum surface_runoff value"
+        },
+        {
+          "name": "surface_runoff_max",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum surface_runoff value"
+        },
+        {
+          "name": "total_evaporation_min",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum total_evaporation value"
+        },
+        {
+          "name": "total_evaporation_max",
+          "units": "m of water equivalent",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum total_evaporation value"
+        },
+        {
+          "name": "u_component_of_wind_10m_min",
+          "units": "m/s",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum u_component_of_wind_10m value"
+        },
+        {
+          "name": "u_component_of_wind_10m_max",
+          "units": "m/s",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum u_component_of_wind_10m value"
+        },
+        {
+          "name": "v_component_of_wind_10m_min",
+          "units": "m/s",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum v_component_of_wind_10m value"
+        },
+        {
+          "name": "v_component_of_wind_10m_max",
+          "units": "m/s",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum v_component_of_wind_10m value"
+        },
+        {
+          "name": "surface_pressure_min",
+          "units": "Pa",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum surface_pressure value"
+        },
+        {
+          "name": "surface_pressure_max",
+          "units": "Pa",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum surface_pressure value"
+        },
+        {
+          "name": "total_precipitation_min",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum total_precipitation value"
+        },
+        {
+          "name": "total_precipitation_max",
+          "units": "m",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum total_precipitation value"
+        },
+        {
+          "name": "leaf_area_index_high_vegetation_min",
+          "units": "Area fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum leaf_area_index_high_vegetation value"
+        },
+        {
+          "name": "leaf_area_index_high_vegetation_max",
+          "units": "Area fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum leaf_area_index_high_vegetation value"
+        },
+        {
+          "name": "leaf_area_index_low_vegetation_min",
+          "units": "Area fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Daily minimum leaf_area_index_low_vegetation value"
+        },
+        {
+          "name": "leaf_area_index_low_vegetation_max",
+          "units": "Area fraction",
+          "min": 0,
+          "max": 0,
+          "description": "Daily maximum leaf_area_index_low_vegetation value"
+        }
+      ]
+    }
+  ],
+  "masks": [
+    {
+      "id": "ESA_WORLDCEREAL_V100",
+      "name": "ESA WorldCereal 10m v100",
+      "ee_collection_name": "ESA/WorldCereal/2021/MODELS/v100",
+      "description": "A global-scale annual and seasonal crop map product suite. The collection contains up to 106 agro-ecological zone (AEZ) images for each product which were all processed with respect to their own regional seasonality.",
+      "website": "https://developers.google.com/earth-engine/datasets/catalog/ESA_WorldCereal_2021_MODELS_v100",
+      "startDate": "2020-01-01",
+      "endDate": "2021-12-31",
+      "pixelSize": 10,
+      "bands": [
+        {
+          "name": "classification",
+          "units": "binary",
+          "min": 0,
+          "max": 100,
+          "description": "Binary classification (0 or 100)"
+        },
+        {
+          "name": "confidence",
+          "units": "0-100",
+          "min": 0,
+          "max": 100,
+          "description": "Classification confidence"
+        }
+      ],
+      "filters": [
+        {
+          "key": "product",
+          "label": "Product",
+          "options": [
+            "temporarycrops",
+            "maize",
+            "wintercereals",
+            "springcereals",
+            "irrigation"
+          ]
+        },
+        {
+          "key": "season",
+          "label": "Season",
+          "options": [
+            "tc-annual",
+            "tc-wintercereals",
+            "tc-springcereals",
+            "tc-maize-main",
+            "tc-maize-second"
+          ]
+        }
+      ]
+    }
+  ]
+}

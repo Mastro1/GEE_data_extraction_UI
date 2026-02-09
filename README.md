@@ -1,0 +1,97 @@
+# 🌍 GEE Data Extractor UI
+
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=Streamlit&logoColor=white)](https://streamlit.io/)
+[![Google Earth Engine](https://img.shields.io/badge/Google%20Earth%20Engine-4285F4?logo=google-earth&logoColor=white)](https://earthengine.google.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+A professional, high-performance **Google Earth Engine (GEE) Data Extraction Suite** with a modern **Streamlit** interface. Designed for researchers, GIS specialists, and data scientists to streamline the acquisition of historical satellite datasets.
+
+---
+
+## 🚀 Overview
+
+The **GEE Data Extractor** provides a robust pipeline for extracting complex environmental and satellite data without the need for manual coding in the GEE JavaScript API. Users can visualize their regions of interest (ROI) instantly and submit high-volume extraction jobs to either Google Drive or direct local storage.
+
+### ✨ Key Features
+
+- **Intuitive GUI**: A polished Streamlit dashboard for end-to-end management.
+- **Flexible ROI Selection**:
+  - **Point Coordinates**: Precise Lat/Lon extraction.
+  - **File Upload**: Support for Shapefiles (`.shp`), GeoJSON, and KML.
+  - **Administrative Boundaries**: Seamless integration with **GADM** via `pygadm` for country and province-level selection.
+- **Comprehensive Dataset Support**:
+  - **Vegetation Indices**: MODIS NDVI & EVI (MOD13Q1).
+  - **Weather & Climate**: ERA5-Land Hourly and Daily reanalysis.
+  - **Precipitation**: CHIRPS Daily high-resolution rainfall data.
+- **Reproducibility**: Automatic state persistence in `settings.toml` and full job history tracking in `.cache/history.json`.
+- **Passive Map Verification**: Automated map centering and geometry rendering to confirm input accuracy before submission.
+
+---
+
+## 🛠️ Installation
+
+### 1. Prerequisites
+- Python 3.8 or higher.
+- A **Google Earth Engine** account ([Sign up here](https://earthengine.google.com/signup/)).
+
+### 2. Clone the Repository
+```bash
+git clone https://github.com/Mastro1/CropYieldData_UI.git
+cd GEE_data_extractor_UI
+```
+
+### 3. Install Dependencies
+```bash
+pip install streamlit earthengine-api pygadm geopandas toml folium streamlit-folium
+```
+
+### 4. Authentication
+Run the following command to authenticate your Google Earth Engine account:
+```bash
+python -c "import ee; ee.Authenticate()"
+```
+
+---
+
+## 📖 Usage
+
+1. **Start the Application**:
+   ```bash
+   streamlit run src/interface/app.py
+   ```
+2. **Configure Settings**: Use the sidebar to set your GEE Project ID and default download folders.
+3. **Define WHAT**: Select your satellite dataset (e.g., ERA5-Land) and the specific bands you require.
+4. **Define WHERE**: Upload a geometry file or select a GADM administrative unit.
+5. **Define WHEN**: Set your start/end years and optional seasonal filters.
+6. **Execute**: Choose "Save to Drive" for large batch jobs or "Download Locally" for immediate samples.
+
+---
+
+## 🏗️ Technical Architecture
+
+The system utilizes a **Local State Architecture** to ensure responsiveness and reliability:
+
+- **Frontend**: Streamlit (Interface Layer)
+- **Infrastructure**: Python-native GEE API wrapper.
+- **Persistence**: `config/settings.toml` for user preferences.
+- **History**: JSON-based event log storing previous run parameters for instant reloading.
+
+---
+
+## 🔍 SEO & Keywords
+
+`Satellite Data Extraction` | `Google Earth Engine UI` | `Remote Sensing Python` | `Environmental Data Analysis` | `ERA5 Land Data` | `CHIRPS Precipitation Extraction` | `NDVI Timeseries` | `GIS Dashboard` | `Sustainable Agriculture Data`
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+*Developed with ❤️ for the Remote Sensing Community.*

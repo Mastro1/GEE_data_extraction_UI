@@ -1,0 +1,12 @@
+[gee]
+project_id = "asrdownscalingcropdata"
+drive_folder = "GEE_Exports"
+
+[paths]
+download_folder_local = "C:/Users/MassimoPoretti/Downloads/GEE_Local"
+cache_folder = "./.cache/"
+
+[defaults]
+default_satellite = "MODIS_MOD13Q1_061"
+default_method = "Drive"
+default_reducer = "mean"
