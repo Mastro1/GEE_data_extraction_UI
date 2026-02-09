@@ -11,6 +11,8 @@ A professional, high-performance **Google Earth Engine (GEE) Data Extraction Sui
 
 ## 🚀 Overview
 
+![GEE Data Extractor](screenshot.png)
+
 The **GEE Data Extractor** provides a robust pipeline for extracting complex environmental and satellite data without the need for manual coding in the GEE JavaScript API. Users can visualize their regions of interest (ROI) instantly and submit high-volume extraction jobs to either Google Drive or direct local storage.
 
 ### ✨ Key Features
@@ -79,7 +81,17 @@ The system utilizes a **Local State Architecture** to ensure responsiveness and 
 
 ---
 
-## 🔍 SEO & Keywords
+## �️ Roadmap
+
+Future enhancements and upcoming features:
+
+- [ ] **Expand Dataset Catalog**: Integrate additional satellite constellations (e.g., Sentinel-2, Landsat-8/9).
+- [ ] **Spatial Masking**: Add support for uploading and applying custom masks (e.g., crop masks, land cover classification) during extraction.
+- [ ] **Full Session Restore**: Finalize the "Reload Settings" logic to allow seamless recovery of previous work states.
+
+---
+
+## �🔍 SEO & Keywords
 
 `Satellite Data Extraction` | `Google Earth Engine UI` | `Remote Sensing Python` | `Environmental Data Analysis` | `ERA5 Land Data` | `CHIRPS Precipitation Extraction` | `NDVI Timeseries` | `GIS Dashboard` | `Sustainable Agriculture Data`
 
