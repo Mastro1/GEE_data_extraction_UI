@@ -5,7 +5,7 @@
 [![Google Earth Engine](https://img.shields.io/badge/Google%20Earth%20Engine-4285F4?logo=google-earth&logoColor=white)](https://earthengine.google.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A professional, high-performance **Google Earth Engine (GEE) Data Extraction Suite** with a modern **Streamlit** interface. Designed for researchers, GIS specialists, and data scientists to streamline the acquisition of historical satellite datasets.
+A simple but effective **Google Earth Engine (GEE) Data Extraction Suite** with a modern **Streamlit** interface. Designed for researchers, GIS specialists, and data scientists to streamline the acquisition of historical satellite datasets.
 
 ---
 
@@ -13,21 +13,21 @@ A professional, high-performance **Google Earth Engine (GEE) Data Extraction Sui
 
 ![GEE Data Extractor](screenshot.png)
 
-The **GEE Data Extractor** provides a robust pipeline for extracting complex environmental and satellite data without the need for manual coding in the GEE JavaScript API. Users can visualize their regions of interest (ROI) instantly and submit high-volume extraction jobs to either Google Drive or direct local storage.
+The **GEE Data Extractor** provides a robust pipeline for extracting complex environmental and satellite data without the need for manual coding in the GEE JavaScript code platform or with the Python API. Users can visualize their regions of interest (ROI) instantly and submit high-volume extraction jobs to either Google Drive or direct local storage.
 
 ### ✨ Key Features
 
-- **Intuitive GUI**: A polished Streamlit dashboard for end-to-end management.
+- **Intuitive GUI**: A polished Streamlit dashboard for end-to-end data extraction.
 - **Flexible ROI Selection**:
-  - **Point Coordinates**: Precise Lat/Lon extraction.
+  - **Point Coordinates**: Select your Lat/Lon coordinates for extraction.
   - **File Upload**: Support for Shapefiles (`.shp`), GeoJSON, and KML.
   - **Administrative Boundaries**: Seamless integration with **GADM** via `pygadm` for country and province-level selection.
-- **Comprehensive Dataset Support**:
+- **Satellites Available** (for the moment):
   - **Vegetation Indices**: MODIS NDVI & EVI (MOD13Q1).
   - **Weather & Climate**: ERA5-Land Hourly and Daily reanalysis.
   - **Precipitation**: CHIRPS Daily high-resolution rainfall data.
 - **Reproducibility**: Automatic state persistence in `settings.toml` and full job history tracking in `.cache/history.json`.
-- **Passive Map Verification**: Automated map centering and geometry rendering to confirm input accuracy before submission.
+- **Passive Map Verification**: Automated map and geometry rendering to confirm input accuracy before submission.
 
 ---
 
@@ -81,7 +81,7 @@ The system utilizes a **Local State Architecture** to ensure responsiveness and 
 
 ---
 
-## �️ Roadmap
+## 📈 Roadmap
 
 Future enhancements and upcoming features:
 
@@ -91,7 +91,7 @@ Future enhancements and upcoming features:
 
 ---
 
-## �🔍 SEO & Keywords
+## 🔍 SEO & Keywords
 
 `Satellite Data Extraction` | `Google Earth Engine UI` | `Remote Sensing Python` | `Environmental Data Analysis` | `ERA5 Land Data` | `CHIRPS Precipitation Extraction` | `NDVI Timeseries` | `GIS Dashboard` | `Sustainable Agriculture Data`
 
