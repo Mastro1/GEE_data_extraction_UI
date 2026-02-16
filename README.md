@@ -11,7 +11,7 @@ A simple but effective **Google Earth Engine (GEE) Data Extraction Suite** with 
 
 ## 🚀 Overview
 
-![GEE Data Extractor](screenshot.png)
+![GEE Data Extractor](assets/screenshot.png)
 
 The **GEE Data Extractor** provides a robust pipeline for extracting complex environmental and satellite data without the need for manual coding in the GEE JavaScript code platform or with the Python API. Users can visualize their regions of interest (ROI) instantly and submit high-volume extraction jobs to either Google Drive or direct local storage.
 
@@ -45,7 +45,7 @@ cd GEE_data_extractor_UI
 
 ### 3. Install Dependencies
 ```bash
-pip install streamlit earthengine-api pygadm geopandas toml folium streamlit-folium
+pip install -r requirements.txt
 ```
 
 ### 4. Authentication
@@ -59,9 +59,19 @@ python -c "import ee; ee.Authenticate()"
 ## 📖 Usage
 
 1. **Start the Application**:
+   For the best experience, use the provided helper scripts which handle environment setup automatically:
+   
+   - **Windows**: Simply double-click `run.bat` (it will create a virtual environment and install dependencies if they are missing).
+   - **Python/Standard**: Alternatively, use the cross-platform runner:
+     ```bash
+     python run.py
+     ```
+
+   *Note: These scripts are optional convenience tools. You can always run the app manually using:*
    ```bash
    streamlit run src/interface/app.py
    ```
+   
 2. **Configure Settings**: Use the sidebar to set your GEE Project ID and default download folders.
 3. **Define WHAT**: Select your satellite dataset (e.g., ERA5-Land) and the specific bands you require.
 4. **Define WHERE**: Upload a geometry file or select a GADM administrative unit.
