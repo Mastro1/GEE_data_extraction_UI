@@ -411,17 +411,75 @@ def render_gadm_input():
                         # Create folium map
                         m = folium.Map(location=center, zoom_start=5)
                         
-                        # WORKAROUND for pygadm pandas compatibility bug:
-                        # Use gdf.geometry.__geo_interface__ instead of gdf.__geo_interface__
-                        # This avoids triggering the buggy Items.__init__ on subsetting
+                        # Convert to GeoJSON including properties to enable tooltips/popups
+                        # WORKAROUND: Cast to vanilla GeoDataFrame to avoid pygadm subclass issues during to_json()
+                        # The pygadm class seems to interfere with pandas/geopandas serialization
+                        import geopandas as gpd
+                        gdf_vanilla = gpd.GeoDataFrame(gdf, geometry='geometry')
+                        
+                        # Using to_json() ensures we get a standard GeoJSON dictionary
+                        geojson_data = json.loads(gdf_vanilla.to_json())
+                        
+                        # Modular Column Detection
+                        # We want to show all available NAME_X and GID_X columns (0 to 3)
+                        available_properties = []
+                        if 'features' in geojson_data and len(geojson_data['features']) > 0:
+                            first_props = geojson_data['features'][0]['properties']
+                            available_properties = list(first_props.keys())
+                        
+                        # Filter for interesting columns (NAME_X, GID_X)
+                        display_cols = []
+                        for i in range(4): # Check levels 0, 1, 2, 3
+                            # Add NAME column if exists
+                            name_col = f"NAME_{i}"
+                            if name_col in available_properties:
+                                display_cols.append(name_col)
+                            
+                            # Add GID column if exists
+                            gid_col = f"GID_{i}"
+                            if gid_col in available_properties:
+                                display_cols.append(gid_col)
+                        
+                        # Configure Tooltip (Hover)
+                        # Use the most specific NAME column available (last one in the list)
+                        tooltip = None
+                        name_cols = [c for c in display_cols if "NAME" in c]
+                        if name_cols:
+                            tooltip_field = name_cols[-1]
+                            tooltip = folium.GeoJsonTooltip(
+                                fields=[tooltip_field],
+                                aliases=["Region:"],
+                                style="font-weight: bold; color: #333;",
+                                sticky=True
+                            )
+                        
+                        # Configure Popup (Click)
+                        # Show all identified columns
+                        popup = None
+                        if display_cols:
+                            popup = folium.GeoJsonPopup(
+                                fields=display_cols,
+                                aliases=display_cols,
+                                localize=True
+                            )
+                        
+                        # Add GeoJson layer with interactivity
                         folium.GeoJson(
-                            gdf.geometry.__geo_interface__,
+                            geojson_data,
                             style_function=lambda x: {
                                 'fillColor': '#3388ff',
                                 'color': '#3388ff',
                                 'weight': 2,
                                 'fillOpacity': 0.3
-                            }
+                            },
+                            highlight_function=lambda x: {
+                                'fillColor': '#ffcc00', 
+                                'color': '#ffcc00',
+                                'weight': 3,
+                                'fillOpacity': 0.6
+                            },
+                            tooltip=tooltip,
+                            popup=popup
                         ).add_to(m)
                         
                         # Fit bounds
@@ -429,7 +487,7 @@ def render_gadm_input():
                         m.fit_bounds([[bounds[1], bounds[0]], [bounds[3], bounds[2]]])
                         
                         # Display map
-                        st_folium(m, height=350, width=None, key="gadm_map")
+                        st_folium(m, height=450, width=None, key="gadm_map")
                         
                     except Exception as map_error:
                         st.warning(f"Map preview unavailable: {str(map_error)[:100]}")
@@ -467,6 +525,14 @@ def render_time_section(loaded_settings: dict):
     if current_end < current_start:
         st.error(f"⚠️ **Invalid Date Range**: End Year ({current_end}) is before Start Year ({current_start}).")
 
+    # Seasonality filter - OUTSIDE form to allow instant UI update
+    use_season = st.checkbox("🌾 Filter by Season (Day of Year)", 
+                             value=st.session_state.get('use_season', loaded_settings.get('dates', {}).get('use_season', False)),
+                             key="use_season_interactive")
+    
+    # Sync use_season to session state immediately
+    st.session_state.use_season = use_season
+
     with st.form("time_definition_form"):
         col1, col2 = st.columns(2)
         
@@ -488,11 +554,6 @@ def render_time_section(loaded_settings: dict):
                 key="form_end_year"
             )
         
-        # Seasonality filter
-        use_season = st.checkbox("🌾 Filter by Season (Day of Year)", 
-                                 value=loaded_settings.get('dates', {}).get('use_season', False),
-                                 key="form_use_season")
-        
         start_doy = 1
         end_doy = 365
         
@@ -503,7 +564,7 @@ def render_time_section(loaded_settings: dict):
                     "Start DOY",
                     min_value=1,
                     max_value=365,
-                    value=loaded_settings.get('dates', {}).get('start_doy', 1),
+                    value=st.session_state.get('start_doy', loaded_settings.get('dates', {}).get('start_doy', 1)),
                     key="form_start_doy"
                 )
             with col2:
@@ -511,7 +572,7 @@ def render_time_section(loaded_settings: dict):
                     "End DOY",
                     min_value=1,
                     max_value=365,
-                    value=loaded_settings.get('dates', {}).get('end_doy', 365),
+                    value=st.session_state.get('end_doy', loaded_settings.get('dates', {}).get('end_doy', 365)),
                     key="form_end_doy"
                 )
             
@@ -525,7 +586,7 @@ def render_time_section(loaded_settings: dict):
             # Update session state with form values
             st.session_state.start_year = start_year
             st.session_state.end_year = end_year
-            st.session_state.use_season = use_season
+            # use_season is already updated via its own key/interactive widget
             st.session_state.start_doy = start_doy
             st.session_state.end_doy = end_doy
             
@@ -848,20 +909,47 @@ def build_geometry_and_features():
         
         # Build EE features from each geometry
         ee_features = []
-        for i, geom in enumerate(simplified_geoms):
+        
+        # Helper to convert numpy/pandas types to standard python types for JSON serialization
+        def convert_types(obj):
+            if isinstance(obj, (int, float, str, bool, type(None))):
+                return obj
+            if hasattr(obj, 'item'): 
+                return obj.item()
+            return str(obj)
+
+        for i in range(len(gdf)):
+            # Get geometry
+            geom = simplified_geoms.iloc[i]
+            
+            # Get properties for this feature
+            # We use the original gdf to get properties
+            props = gdf.iloc[i].drop('geometry').to_dict()
+            
+            # Filter and sanitise properties
+            # User request: Keep only GID_* and NAME_* columns from GADM
+            clean_props = {}
+            for k, v in props.items():
+                # Check if column starts with GID_ or NAME_
+                if k.startswith(('GID_', 'NAME_')):
+                    clean_props[k] = convert_types(v)
+            
+            # Add basic metadata
+            clean_props.update({
+                'source': 'gadm',
+                'feature_id': i + 1,
+                'country': gadm_selection.get('name', ''),
+                'admin_level': gadm_selection.get('admin_level', 0)
+            })
+
             # Convert shapely geometry to GeoJSON dict
             geom_dict = geom.__geo_interface__
             
             # Create EE geometry from GeoJSON
             ee_geom = ee.Geometry(geom_dict)
             
-            # Create feature with basic properties
-            ee_feature = ee.Feature(ee_geom, {
-                'source': 'gadm',
-                'feature_id': i + 1,
-                'country': gadm_selection.get('name', ''),
-                'admin_level': gadm_selection.get('admin_level', 0)
-            })
+            # Create feature with all properties
+            ee_feature = ee.Feature(ee_geom, clean_props)
             ee_features.append(ee_feature)
         
         # Create FeatureCollection
