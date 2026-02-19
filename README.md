@@ -97,7 +97,7 @@ Future enhancements and upcoming features:
 
 - [ ] **Expand Dataset Catalog**: Integrate additional satellite constellations (e.g., Sentinel-2, Landsat-8/9).
 - [ ] **Spatial Masking**: Add support for uploading and applying custom masks (e.g., crop masks, land cover classification) during extraction.
-- [ ] **Full Session Restore**: Finalize the "Reload Settings" logic to allow seamless recovery of previous work states.
+- [ ] **Full Session Restore**: Finalize the "Reload Settings" logic to allow seamless recovery of previous work states (WIP, works for the most part).
 
 ---
 

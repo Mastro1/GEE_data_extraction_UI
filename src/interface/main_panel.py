@@ -51,15 +51,131 @@ def update_default_filename():
     st.session_state.custom_filename = f"{sat_id}_{start}_{end}_timeseries"
 
 
+
+
+def apply_loaded_settings():
+    """Applies settings from history to session state."""
+    loaded = st.session_state.get('loaded_settings')
+    if not loaded:
+        return
+
+    # 1. Restore Satellite
+    # We need to map ID (saved) to Name (widget key)
+    if loaded.get('satellite'):
+        sat_id = loaded['satellite']
+        satellites = load_satellites()
+        sat_name = next((s['name'] for s in satellites if s['id'] == sat_id), None)
+        if sat_name:
+            st.session_state.satellite_selector = sat_name
+
+    # 2. Restore Bands
+    if loaded.get('bands'):
+        st.session_state.band_multiselect = loaded['bands']
+
+    # 3. Restore Reducers (Band Selections)
+    # Saved as {'band': 'reducer'} in 'reducers' key
+    if loaded.get('reducers'):
+        st.session_state.band_selections = loaded['reducers']
+        # Also set the widget keys for each reducer
+        for band, reducer in loaded['reducers'].items():
+            st.session_state[f"reducer_{band}"] = reducer
+
+    # 4. Restore ROI (Points, Shapefile, GADM)
+    geo_source = loaded.get('geometry_source')
+    if geo_source == 'Points':
+        st.session_state.roi_method = "📍 Point Coordinates"
+    elif geo_source == 'Shapefile':
+        st.session_state.roi_method = "📁 Shapefile Upload"
+    elif geo_source == 'GADM':
+        st.session_state.roi_method = "🗺️ GADM Admin"
+
+    if loaded.get('selected_points'):
+        st.session_state.selected_points = loaded['selected_points']
+    
+    shapefile_path = loaded.get('uploaded_shapefile')
+    if shapefile_path:
+        if os.path.exists(shapefile_path):
+            st.session_state.uploaded_shapefile = shapefile_path
+            st.toast(f"✅ Restored shapefile: {os.path.basename(shapefile_path)}")
+        else:
+            st.error(f"⚠️ Could not restore shapefile: {shapefile_path} (File not found)")
+            st.session_state.uploaded_shapefile = None
+            
+    if loaded.get('gadm_selection'):
+        st.session_state.gadm_selection = loaded['gadm_selection']
+        gadm = loaded['gadm_selection']
+        
+        # Set inputs for the UI widgets
+        st.session_state.gadm_country = gadm.get('name', '')
+        st.session_state.gadm_level = gadm.get('admin_level', 0)
+        
+        # Reset loaded state to force user to click "Load" (or we could auto-load if we trust the inputs)
+        # User requested "prepares it for loading", implying they will click load.
+        st.session_state.gadm_country_loaded = None 
+        st.session_state.gadm_level_loaded = None
+        st.session_state.gadm_gdf = None
+        
+        # Restore specific regions if saved
+        if loaded.get('gadm_regions'):
+             st.session_state.gadm_regions = loaded['gadm_regions']
+        
+    # 5. Restore Time/Dates
+    if loaded.get('dates'):
+        dates = loaded['dates']
+        st.session_state.date_config = dates
+        # Set form keys
+        st.session_state.form_start_year = dates.get('start_year')
+        st.session_state.form_end_year = dates.get('end_year')
+        st.session_state.form_start_doy = dates.get('start_doy', 1)
+        st.session_state.form_end_doy = dates.get('end_doy', 365)
+        st.session_state.use_season_interactive = dates.get('use_season', False)
+        # Also set non-form keys that might be used as fallbacks
+        st.session_state.start_year = dates.get('start_year')
+        st.session_state.end_year = dates.get('end_year')
+        st.session_state.start_doy = dates.get('start_doy', 1)
+        st.session_state.end_doy = dates.get('end_doy', 365)
+        st.session_state.use_season = dates.get('use_season', False)
+
+    # 6. Restore Execution Settings
+    if loaded.get('export_method'):
+        # Map back to full string if we saved short version, but we saved 'Drive' or 'Local' usually?
+        # main_panel saves 'Drive'. Widget options are ["☁️ Save to Google Drive (Batch)", "💾 Download Locally (Interactive)"]
+        # We need to match the option string.
+        saved_method = loaded['export_method']
+        if 'Drive' in saved_method:
+             st.session_state.export_method = "☁️ Save to Google Drive (Batch)"
+        elif 'Local' in saved_method or 'Download' in saved_method:
+             st.session_state.export_method = "💾 Download Locally (Interactive)"
+
+    if loaded.get('custom_filename'):
+        st.session_state.custom_filename = loaded['custom_filename']
+
+    # Clear after applying to prevent re-application
+    st.session_state.loaded_settings = {}
+    st.toast("✅ Settings restored successfully!")
+
+
+
 def render(settings_service: SettingsService):
     """Renders the main panel with extraction pipeline."""
     st.title("🛰️ GEE Data Extractor")
+    
+    # Apply loaded settings if any
+    apply_loaded_settings()
     
     # Load satellites configuration
     satellites = load_satellites()
     
     # Check for loaded settings from history
-    loaded_settings = st.session_state.get('loaded_settings', {})
+    # We still use this dict for initial values in widgets before they are keyed to session state
+    # But apply_loaded_settings handles the complex state
+    loaded_settings = {} # Cleared by apply_loaded_settings, but we might want to keep a copy? 
+    # Actually, apply_loaded_settings applies to SESSION STATE.
+    # The widgets below read from loaded_settings OR session state.
+    # To avoid double-handling, we should rely on session_state where possible.
+    # However, some widgets (like satellite selector) trigger reruns on change.
+    # Let's keep loaded_settings as empty since we applied it.
+
     
     # Initialize session state for points if not exists
     if 'selected_points' not in st.session_state:
@@ -324,6 +440,10 @@ def render_shapefile_input():
             tmp.write(uploaded_file.getvalue())
             st.session_state.uploaded_shapefile = tmp.name
         st.success(f"Uploaded: {uploaded_file.name}")
+    
+    elif st.session_state.get('uploaded_shapefile'):
+        filename = os.path.basename(st.session_state.uploaded_shapefile)
+        st.info(f"📂 Using restored file: **{filename}**")
 
 
 def render_gadm_input():
@@ -799,18 +919,26 @@ def run_extraction(settings_service: SettingsService, export_method: str):
                 st.markdown(f"📊 [View in GEE Console](https://code.earthengine.google.com/tasks)")
                 
                 # Save to history
+                # Save to history
                 history_manager = HistoryManager()
-                history_manager.add_entry({
+                history_entry = {
                     'satellite': selected_satellite['id'],
                     'bands': selected_bands,
                     'reducers': band_selections,
-                    'geometry_source': 'Points' if selected_points else 'Shapefile/GADM',
+                    'geometry_source': 'Points' if selected_points else ('Shapefile' if st.session_state.get('uploaded_shapefile') else 'GADM'),
                     'num_points': len(selected_points) if selected_points else 0,
+                    'selected_points': selected_points,  # Save full points list
+                    'selected_points': selected_points,  # Save full points list
+                    'gadm_selection': {k: v for k, v in st.session_state.get('gadm_selection', {}).items() if k != 'gdf'}, # Save GADM details without GDF
+                    'gadm_regions': st.session_state.get('gadm_regions'), # Save specific regions if any
+                    'uploaded_shapefile': st.session_state.get('uploaded_shapefile'), # Save shapefile path
                     'dates': date_config,
                     'export_method': 'Drive',
                     'output_format': 'CSV',
-                    'task_id': task_id
-                })
+                    'task_id': task_id,
+                    'custom_filename': task_name
+                }
+                history_manager.add_entry(history_entry)
                 
             else:
                 # Local download - get as CSV directly
