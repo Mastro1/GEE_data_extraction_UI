@@ -638,6 +638,13 @@ def render_time_section(loaded_settings: dict):
     """Section 3: Time Definition with form to reduce reruns."""
     st.header("3️⃣ Time Definition")
     
+    # Derive minimum selectable year from the selected satellite's start date
+    selected_satellite = st.session_state.get('selected_satellite')
+    if selected_satellite and selected_satellite.get('startDate'):
+        sat_min_year = int(selected_satellite['startDate'][:4])
+    else:
+        sat_min_year = 1980
+
     # Check for invalid date ranges in session state
     current_start = st.session_state.get('start_year', 2020)
     current_end = st.session_state.get('end_year', datetime.now().year)
@@ -659,18 +666,18 @@ def render_time_section(loaded_settings: dict):
         with col1:
             start_year = st.number_input(
                 "Start Year",
-                min_value=1980,
+                min_value=sat_min_year,
                 max_value=datetime.now().year,
-                value=loaded_settings.get('dates', {}).get('start_year', 2020),
+                value=max(loaded_settings.get('dates', {}).get('start_year', 2020), sat_min_year),
                 key="form_start_year"
             )
         
         with col2:
             end_year = st.number_input(
                 "End Year",
-                min_value=1980,
+                min_value=sat_min_year,
                 max_value=datetime.now().year,
-                value=loaded_settings.get('dates', {}).get('end_year', datetime.now().year),
+                value=max(loaded_settings.get('dates', {}).get('end_year', datetime.now().year), sat_min_year),
                 key="form_end_year"
             )
         
@@ -865,6 +872,9 @@ def run_extraction(settings_service: SettingsService, export_method: str):
             else:
                 reducer = ee.Reducer.mean()
             
+            # Detect whether the selected dataset has sub-daily (hourly) cadence
+            is_hourly = selected_satellite.get('isHourly', False)
+
             # Function to extract data for each image
             def extract_values(image):
                 """Extract values at each point/region for an image."""
@@ -880,14 +890,19 @@ def run_extraction(settings_service: SettingsService, export_method: str):
                 
                 # Add date info to each feature
                 def add_date(feature):
-                    return feature.set({
+                    props = {
                         'date': date.format('YYYY-MM-dd'),
                         'year': date.get('year'),
                         'month': date.get('month'),
                         'day': date.get('day'),
                         'doy': date.getRelative('day', 'year').add(1),
                         'system_time': image.get('system:time_start')
-                    })
+                    }
+                    if is_hourly:
+                        # Use the native 'hour' image property stored by GEE
+                        # (not date.get('hour') which reads the UTC timestamp)
+                        props['hour'] = image.get('hour')
+                    return feature.set(props)
                 
                 return reduced.map(add_date)
             

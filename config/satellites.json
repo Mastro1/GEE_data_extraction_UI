@@ -818,6 +818,7 @@
       "description": "ERA5-Land is a reanalysis dataset providing a consistent view of the evolution of land variables over several decades at an enhanced resolution compared to ERA5.",
       "website": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_LAND_HOURLY",
       "startDate": "1950-01-01",
+      "isHourly": true,
       "pixelSize": 11132,
       "bands": [
         {
