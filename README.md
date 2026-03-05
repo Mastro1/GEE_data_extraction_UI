@@ -7,6 +7,8 @@
 
 A simple but effective **Google Earth Engine (GEE) Data Extraction Suite** with a modern **Streamlit** interface. Designed for researchers, GIS specialists, and data scientists to streamline the acquisition of historical satellite datasets.
 
+*Note:* This is a work in progress. Main functionalities are working but there are still some bugs to fix and features to add. I really appreciate testers to find them and suggest improvements.
+
 ---
 
 ## 🚀 Overview
@@ -39,14 +41,17 @@ The **GEE Data Extractor** provides a robust pipeline for extracting complex env
 
 ### 2. Clone the Repository
 ```bash
-git clone https://github.com/Mastro1/CropYieldData_UI.git
-cd GEE_data_extractor_UI
+git clone https://github.com/Mastro1/GEE_data_extraction_UI.git
+cd GEE_data_extraction_UI
 ```
 
 ### 3. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
+
+  - **Windows**: Simply double-click `run.bat` (it will create a virtual environment and install dependencies).
+  - **Standard**:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 ### 4. Authentication
 Run the following command to authenticate your Google Earth Engine account:
@@ -74,7 +79,7 @@ python -c "import ee; ee.Authenticate()"
    
 2. **Configure Settings**: Use the sidebar to set your GEE Project ID and default download folders.
 3. **Define WHAT**: Select your satellite dataset (e.g., ERA5-Land) and the specific bands you require.
-4. **Define WHERE**: Upload a geometry file or select a GADM administrative unit.
+4. **Define WHERE**: Select your points, upload a geometry file or select a GADM administrative unit.
 5. **Define WHEN**: Set your start/end years and optional seasonal filters.
 6. **Execute**: Choose "Save to Drive" for large batch jobs or "Download Locally" for immediate samples.
 
@@ -109,7 +114,7 @@ Future enhancements and upcoming features:
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Please feel free to submit a Pull Request or a Issue.
 
 ## 📄 License
 
