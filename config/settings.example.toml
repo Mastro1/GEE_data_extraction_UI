@@ -1,9 +1,9 @@
 [gee]
-project_id = "asrdownscalingcropdata"
+project_id = "your-gee-project-id"
 drive_folder = "GEE_Exports"
 
 [paths]
-download_folder_local = "C:/Users/MassimoPoretti/Downloads/GEE_Local"
+download_folder_local = "./downloads"
 cache_folder = "./.cache/"
 
 [defaults]

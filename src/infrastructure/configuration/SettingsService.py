@@ -10,11 +10,12 @@ class SettingsService:
     def _load_settings(self) -> dict:
         """Loads settings from the TOML file. Creates default if not exists."""
         if not self.config_path.exists():
-            # In a real scenario, we might want to copy a default template here
-            # For now, return empty or raise error, but the PDD implies it should exist.
-            # We'll return a basic structure to avoid crashes if file is missing 
-            # during dev, though it should be created by now.
-            return {}
+            import shutil
+            example_path = self.config_path.with_name('settings.example.toml')
+            if example_path.exists():
+                shutil.copy(example_path, self.config_path)
+            else:
+                return {}
         
         try:
             return toml.load(self.config_path)
