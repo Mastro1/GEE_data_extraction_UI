@@ -899,16 +899,46 @@ def run_extraction(settings_service: SettingsService, export_method: str):
                         'system_time': image.get('system:time_start')
                     }
                     if is_hourly:
-                        # Use the native 'hour' image property stored by GEE
-                        # (not date.get('hour') which reads the UTC timestamp)
-                        props['hour'] = image.get('hour')
+                        # Store only the time part (HH:mm) so sub-daily slots
+                        # (e.g. 00:00 vs 00:30 for IMERG 30-min) are distinguishable
+                        # without duplicating the date column.
+                        props['time'] = date.format('HH:mm')
+                    # For a single-band image, GEE's reduceRegions names the output
+                    # after the reducer (e.g. 'mean'), not the band. Rename it so
+                    # the column is always identifiable regardless of reducer choice.
+                    # For multi-band images GEE already uses the band names.
+                    if len(selected_bands) == 1:
+                        props[selected_bands[0]] = feature.get(reducer_name)
                     return feature.set(props)
                 
                 return reduced.map(add_date)
             
             # Map over collection to extract values
             extracted = collection.map(extract_values).flatten()
-            
+
+            # Build a logical column order for the output CSV -------------
+            _time_cols = ['date']
+            if is_hourly:
+                _time_cols.append('time')
+            _time_cols += ['year', 'month', 'day', 'doy']
+
+            _spatial_cols = []
+            if selected_points:
+                _spatial_cols = ['point_id', 'latitude', 'longitude']
+            elif st.session_state.get('gadm_selection') and 'gdf' in st.session_state.get('gadm_selection', {}):
+                _gadm_gdf = st.session_state['gadm_selection']['gdf']
+                _gadm_name_gid = [c for c in _gadm_gdf.columns
+                                   if c.startswith(('GID_', 'NAME_'))]
+                _spatial_cols = ['feature_id', 'country', 'admin_level', 'source'] + _gadm_name_gid
+            else:
+                _spatial_cols = ['source']
+
+            ordered_columns = (
+                ['system:index'] + _time_cols + _spatial_cols
+                + selected_bands + ['system_time', '.geo']
+            )
+            # ---------------------------------------------------------------
+
             # Export task name (use custom filename if provided)
             task_name = st.session_state.get('custom_filename', f"{selected_satellite['id']}_{date_config['start_year']}_{date_config['end_year']}_timeseries")
             
@@ -921,7 +951,8 @@ def run_extraction(settings_service: SettingsService, export_method: str):
                     description=task_name,
                     folder=drive_folder,
                     fileNamePrefix=task_name,
-                    fileFormat='CSV'
+                    fileFormat='CSV',
+                    selectors=ordered_columns
                 )
                 task.start()
                 
@@ -974,7 +1005,15 @@ def run_extraction(settings_service: SettingsService, export_method: str):
                             rows.append(props)
                         
                         df = pd.DataFrame(rows)
-                        
+
+                        # Reorder columns into a logical order;
+                        # preserve any unexpected extra columns at the end.
+                        _extra = [c for c in df.columns
+                                  if c not in ordered_columns]
+                        _final_cols = [c for c in ordered_columns + _extra
+                                       if c in df.columns]
+                        df = df[_final_cols]
+
                         # Provide download button
                         csv_data = df.to_csv(index=False)
                         st.success("✅ Data extracted successfully!")

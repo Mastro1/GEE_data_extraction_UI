@@ -19,6 +19,82 @@
       ]
     },
     {
+      "id": "NASA_GPM_L3_IMERG_V07",
+      "name": "GPM IMERG V07 (30-Min)",
+      "ee_collection_name": "NASA/GPM_L3/IMERG_V07",
+      "description": "Global Precipitation Measurement (GPM) IMERG V07 provides half-hourly global precipitation estimates combining data from all passive-microwave instruments in the GPM Constellation. The Integrated Multi-satellitE Retrievals for GPM (IMERG) algorithm intercalibrates, merges, and interpolates satellite microwave precipitation estimates together with microwave-calibrated infrared satellite estimates and precipitation gauge analyses.",
+      "website": "https://developers.google.com/earth-engine/datasets/catalog/NASA_GPM_L3_IMERG_V07",
+      "startDate": "1998-01-01",
+      "isHourly": true,
+      "cadence": "30min",
+      "pixelSize": 11132,
+      "bands": [
+        {
+          "name": "MWobservationTime",
+          "units": "min. into half hour",
+          "min": 0,
+          "max": 29,
+          "description": "PMW source time — minutes into the half-hour window."
+        },
+        {
+          "name": "MWprecipSource",
+          "units": "bitmask",
+          "min": 0,
+          "max": 14,
+          "description": "PMW source sensor identifier (Bits 0-3): 0=No observation, 1=TMI, 3=AMSR, 4=SSMI, 5=SSMIS, 6=AMSU, 7=MHS, 8=SAPHIR, 9=GMI, 11=ATMS, 12=AIRS, 13=TOVS, 14=CRIS."
+        },
+        {
+          "name": "MWprecipitation",
+          "units": "mm/hr",
+          "min": 0,
+          "max": 120,
+          "description": "Merged passive microwave (PMW) precipitation estimate."
+        },
+        {
+          "name": "IRinfluence",
+          "units": "%",
+          "min": 0,
+          "max": 100,
+          "description": "Kalman filter weight assigned to the infrared (IR) precipitation estimate."
+        },
+        {
+          "name": "IRprecipitation",
+          "units": "mm/hr",
+          "min": 0,
+          "max": 79.5,
+          "description": "Infrared-based precipitation estimate."
+        },
+        {
+          "name": "precipitation",
+          "units": "mm/hr",
+          "min": 0,
+          "max": 174,
+          "description": "Snapshot precipitation — calibrated merged estimate."
+        },
+        {
+          "name": "precipitationUncal",
+          "units": "mm/hr",
+          "min": 0,
+          "max": 120,
+          "description": "Snapshot precipitation — uncalibrated merged estimate."
+        },
+        {
+          "name": "probabilityLiquidPrecipitation",
+          "units": "%",
+          "min": 0,
+          "max": 100,
+          "description": "Probability that the precipitation phase is liquid (as opposed to solid/snow)."
+        },
+        {
+          "name": "randomError",
+          "units": "mm/hr",
+          "min": 0.24,
+          "max": 250,
+          "description": "Random error estimate for the calibrated precipitation band."
+        }
+      ]
+    },
+    {
       "id": "MODIS_MOD13Q1_061",
       "name": "MODIS MOD13Q1 v6.1 (16-Day)",
       "ee_collection_name": "MODIS/061/MOD13Q1",
