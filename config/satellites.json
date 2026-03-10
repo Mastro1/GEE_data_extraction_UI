@@ -30,13 +30,6 @@
       "pixelSize": 11132,
       "bands": [
         {
-          "name": "MWobservationTime",
-          "units": "min. into half hour",
-          "min": 0,
-          "max": 29,
-          "description": "PMW source time — minutes into the half-hour window."
-        },
-        {
           "name": "MWprecipSource",
           "units": "bitmask",
           "min": 0,

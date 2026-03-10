@@ -27,7 +27,7 @@ The **GEE Data Extractor** provides a robust pipeline for extracting complex env
 - **Satellites Available** (for the moment):
   - **Vegetation Indices**: MODIS NDVI & EVI (MOD13Q1).
   - **Weather & Climate**: ERA5-Land Hourly and Daily reanalysis.
-  - **Precipitation**: CHIRPS Daily high-resolution rainfall data.
+  - **Precipitation**: CHIRPS Daily high-resolution rainfall data and GPM IMERG V07 (30-Min).
 - **Reproducibility**: Automatic state persistence in `settings.toml` and full job history tracking in `.cache/history.json`.
 - **Passive Map Verification**: Automated map and geometry rendering to confirm input accuracy before submission.
 

@@ -4,10 +4,70 @@ import json
 import os
 from pathlib import Path
 import pygadm
+from shapely import force_2d
 
 class GeometryService:
     def __init__(self):
         pass
+
+    def parse_file(self, file_path: str) -> dict:
+        """
+        Quick-scan a geometry file and return lightweight metadata (no GeoDataFrame).
+        
+        Returns:
+            dict: {'type': 'points'|'shapes', 'n_features': int, 'geom_types': list[str]}
+        """
+        try:
+            gdf = gpd.read_file(file_path)
+            
+            if gdf.empty:
+                raise ValueError("The file contains no geometries.")
+            
+            # Detect geometry types
+            geom_types = list(gdf.geom_type.unique())
+            point_types = {'Point', 'MultiPoint'}
+            detected_type = 'points' if set(geom_types).issubset(point_types) else 'shapes'
+            
+            return {
+                'type': detected_type,
+                'n_features': len(gdf),
+                'geom_types': geom_types
+            }
+            
+        except Exception as e:
+            raise ValueError(f"Error reading geometry file: {e}")
+
+    def load_file(self, file_path: str, simplify_tolerance: float = 0.0) -> gpd.GeoDataFrame:
+        """
+        Read a geometry file on-demand and return a processed GeoDataFrame.
+        Called only when data is actually needed (map preview or extraction).
+        
+        Args:
+            file_path: Path to the file
+            simplify_tolerance: If > 0, simplify shape geometries (degrees). 
+                                Use ~0.01 for GEE export to avoid payload limits.
+        """
+        gdf = gpd.read_file(file_path)
+        
+        if gdf.empty:
+            raise ValueError("The file contains no geometries.")
+        
+        # Reproject to WGS84 if needed
+        if gdf.crs and gdf.crs != "EPSG:4326":
+            gdf = gdf.to_crs("EPSG:4326")
+        elif gdf.crs is None:
+            gdf = gdf.set_crs("EPSG:4326")
+        
+        # Drop Z coordinates (common in KML files)
+        gdf['geometry'] = gdf['geometry'].apply(force_2d)
+        
+        # Simplify shapes if requested (reduces GEE payload size)
+        if simplify_tolerance > 0:
+            point_types = {'Point', 'MultiPoint'}
+            if not set(gdf.geom_type.unique()).issubset(point_types):
+                gdf['geometry'] = gdf['geometry'].simplify(tolerance=simplify_tolerance)
+        
+        return gdf
 
     def parse_geometry(self, data, geometry_type: str) -> ee.Geometry:
         """

@@ -12,8 +12,8 @@ import json
 import folium
 from streamlit_folium import st_folium
 from pathlib import Path
-import tempfile
 import os
+import threading
 from datetime import datetime
 
 from src.infrastructure.configuration.SettingsService import SettingsService
@@ -85,7 +85,7 @@ def apply_loaded_settings():
     if geo_source == 'Points':
         st.session_state.roi_method = "📍 Point Coordinates"
     elif geo_source == 'Shapefile':
-        st.session_state.roi_method = "📁 Shapefile Upload"
+        st.session_state.roi_method = "📁 File Import"
     elif geo_source == 'GADM':
         st.session_state.roi_method = "🗺️ GADM Admin"
 
@@ -302,7 +302,7 @@ def render_roi_section(loaded_settings: dict):
     # Input method selector
     roi_method = st.radio(
         "Select input method",
-        options=["📍 Point Coordinates", "📁 Shapefile Upload", "🗺️ GADM Admin"],
+        options=["📍 Point Coordinates", "📁 File Import", "🗺️ GADM Admin"],
         horizontal=True,
         key="roi_method"
     )
@@ -311,7 +311,7 @@ def render_roi_section(loaded_settings: dict):
     
     if "📍 Point" in roi_method:
         render_point_input(loaded_settings)
-    elif "📁 Shapefile" in roi_method:
+    elif "📁 File" in roi_method:
         render_shapefile_input()
     elif "🗺️ GADM" in roi_method:
         render_gadm_input()
@@ -423,27 +423,169 @@ def render_point_input(loaded_settings: dict):
             st.rerun()
 
 
+def _open_file_dialog():
+    """Open a native file dialog in a separate thread (tkinter requires this from Streamlit)."""
+    import tkinter as tk
+    from tkinter import filedialog
+    
+    result = [None]
+    
+    def run_dialog():
+        root = tk.Tk()
+        root.withdraw()  # Hide the main window
+        root.attributes('-topmost', True)  # Bring dialog to front
+        file_path = filedialog.askopenfilename(
+            title="Select a geometry file",
+            filetypes=[
+                ("All supported", "*.shp *.geojson *.json *.kml *.zip"),
+                ("Shapefile", "*.shp"),
+                ("GeoJSON", "*.geojson *.json"),
+                ("KML", "*.kml"),
+                ("Zipped Shapefile", "*.zip"),
+                ("All files", "*.*")
+            ]
+        )
+        root.destroy()
+        result[0] = file_path
+    
+    # Run in a thread to avoid Streamlit/tkinter event loop conflicts
+    thread = threading.Thread(target=run_dialog)
+    thread.start()
+    thread.join()
+    return result[0]
+
+
 def render_shapefile_input():
-    """Shapefile/GeoJSON upload."""
-    st.subheader("Shapefile Upload")
+    """File import: Shapefile, GeoJSON, KML with path selector and button-triggered map preview."""
+    st.subheader("File Import")
     
-    uploaded_file = st.file_uploader(
-        "Upload shapefile (.zip), GeoJSON (.geojson), or KML (.kml)",
-        type=['zip', 'geojson', 'json', 'kml'],
-        key="shapefile_uploader"
-    )
+    geometry_service = GeometryService()
     
-    if uploaded_file:
-        # Save to temp file
-        suffix = Path(uploaded_file.name).suffix
-        with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp:
-            tmp.write(uploaded_file.getvalue())
-            st.session_state.uploaded_shapefile = tmp.name
-        st.success(f"Uploaded: {uploaded_file.name}")
+    # --- Apply pending state changes BEFORE widget creation ---
+    # (Streamlit allows setting widget keys before the widget is instantiated)
+    if st.session_state.get('_pending_file_path') is not None:
+        st.session_state.import_file_path = st.session_state._pending_file_path
+        del st.session_state._pending_file_path
     
-    elif st.session_state.get('uploaded_shapefile'):
-        filename = os.path.basename(st.session_state.uploaded_shapefile)
-        st.info(f"📂 Using restored file: **{filename}**")
+    # --- File path input with Browse button ---
+    st.markdown("**Select a geometry file** (`.shp`, `.geojson`, `.kml`, `.zip`):")
+    col1, col2 = st.columns([4, 1])
+    with col1:
+        file_path = st.text_input(
+            "File path",
+            key="import_file_path",
+            label_visibility="collapsed",
+            placeholder="C:\\path\\to\\your\\file.shp"
+        )
+    with col2:
+        st.write("")  # Spacer for alignment
+        if st.button("📂 Browse", key="browse_file_btn", use_container_width=True):
+            selected = _open_file_dialog()
+            if selected:
+                # Queue the path for next rerun (can't set widget key after instantiation)
+                st.session_state._pending_file_path = selected
+                st.session_state.imported_geodata = None
+                st.session_state.import_preview_ready = False
+                st.rerun()
+    
+    # Use the widget value (handles both manual typing and browse)
+    file_path = file_path.strip() if file_path else ''
+    
+    # --- Load file button ---
+    if file_path:
+        col_load, col_clear = st.columns([1, 1])
+        with col_load:
+            load_clicked = st.button("📥 Load File", use_container_width=True, type="primary")
+        with col_clear:
+            if st.button("🗑️ Clear", key="clear_import", use_container_width=True):
+                st.session_state._pending_file_path = ''
+                st.session_state.imported_geodata = None
+                st.session_state.uploaded_shapefile = None
+                st.session_state.import_preview_ready = False
+                st.rerun()
+        
+        if load_clicked:
+            if not os.path.exists(file_path):
+                st.error(f"❌ File not found: {file_path}")
+            else:
+                with st.spinner("Loading geometry file..."):
+                    try:
+                        result = geometry_service.parse_file(file_path)
+                        st.session_state.imported_geodata = result
+                        st.session_state.uploaded_shapefile = file_path
+                        st.session_state.import_preview_ready = False  # Reset preview
+                        st.rerun()
+                    except ValueError as e:
+                        st.error(f"❌ {e}")
+                        st.session_state.imported_geodata = None
+    
+    # --- Display results if we have imported metadata ---
+    imported = st.session_state.get('imported_geodata')
+    if imported:
+        geo_type = imported['type']
+        n_features = imported['n_features']
+        
+        if geo_type == 'points':
+            st.success(f"✅ Detected: **{n_features} Point(s)**")
+        else:
+            st.success(f"✅ Detected: **{n_features} Shape(s)** ({', '.join(imported['geom_types'])})")
+        
+        # --- Button-triggered map preview (reads file on-demand) ---
+        if st.button("🔍 Preview on Map", key="preview_import_map", use_container_width=True):
+            st.session_state.import_preview_ready = True
+        
+        if st.session_state.get('import_preview_ready'):
+            st.markdown("**Import Preview:**")
+            import_path = st.session_state.get('uploaded_shapefile', '')
+            if import_path and os.path.exists(import_path):
+                try:
+                    # Load file on-demand just for preview (simplified for rendering speed)
+                    gdf = geometry_service.load_file(import_path, simplify_tolerance=0.005)
+                    
+                    centroid = gdf.geometry.unary_union.centroid
+                    center = [centroid.y, centroid.x]
+                    m = folium.Map(location=center, zoom_start=5)
+                    
+                    if geo_type == 'points':
+                        for i, row in gdf.iterrows():
+                            pt = row.geometry
+                            if pt.geom_type == 'MultiPoint':
+                                for sub_pt in pt.geoms:
+                                    folium.Marker(
+                                        [sub_pt.y, sub_pt.x],
+                                        popup=f"Point ({sub_pt.y:.4f}, {sub_pt.x:.4f})",
+                                        icon=folium.Icon(color='blue', icon='info-sign')
+                                    ).add_to(m)
+                            else:
+                                folium.Marker(
+                                    [pt.y, pt.x],
+                                    popup=f"Point ({pt.y:.4f}, {pt.x:.4f})",
+                                    icon=folium.Icon(color='blue', icon='info-sign')
+                                ).add_to(m)
+                    else:
+                        geojson_data = json.loads(gdf.to_json())
+                        folium.GeoJson(
+                            geojson_data,
+                            style_function=lambda x: {
+                                'fillColor': '#3388ff',
+                                'color': '#3388ff',
+                                'weight': 2,
+                                'fillOpacity': 0.3
+                            },
+                            highlight_function=lambda x: {
+                                'fillColor': '#ffcc00',
+                                'color': '#ffcc00',
+                                'weight': 3,
+                                'fillOpacity': 0.6
+                            }
+                        ).add_to(m)
+                    
+                    bounds = gdf.total_bounds
+                    m.fit_bounds([[bounds[1], bounds[0]], [bounds[3], bounds[2]]])
+                    
+                    st_folium(m, height=400, width=None, key="import_preview_map")
+                except Exception as map_err:
+                    st.warning(f"Map preview unavailable: {str(map_err)[:100]}")
 
 
 def render_gadm_input():
@@ -923,19 +1065,24 @@ def run_extraction(settings_service: SettingsService, export_method: str):
             _time_cols += ['year', 'month', 'day', 'doy']
 
             _spatial_cols = []
+            _imported = st.session_state.get('imported_geodata')
             if selected_points:
+                _spatial_cols = ['point_id', 'latitude', 'longitude']
+            elif _imported and _imported.get('type') == 'points':
                 _spatial_cols = ['point_id', 'latitude', 'longitude']
             elif st.session_state.get('gadm_selection') and 'gdf' in st.session_state.get('gadm_selection', {}):
                 _gadm_gdf = st.session_state['gadm_selection']['gdf']
                 _gadm_name_gid = [c for c in _gadm_gdf.columns
                                    if c.startswith(('GID_', 'NAME_'))]
                 _spatial_cols = ['feature_id', 'country', 'admin_level', 'source'] + _gadm_name_gid
+            elif _imported and _imported.get('type') == 'shapes':
+                _spatial_cols = ['feature_id', 'source']
             else:
                 _spatial_cols = ['source']
 
             ordered_columns = (
                 ['system:index'] + _time_cols + _spatial_cols
-                + selected_bands + ['system_time', '.geo']
+                + selected_bands + ['system_time']
             )
             # ---------------------------------------------------------------
 
@@ -1044,7 +1191,7 @@ def build_geometry_and_features():
     """Build ee.Geometry and ee.FeatureCollection from session state inputs."""
     geometry_service = GeometryService()
     
-    # Check for points
+    # Check for manual points
     points = st.session_state.get('selected_points', [])
     if points:
         # Create features with point IDs
@@ -1068,11 +1215,62 @@ def build_geometry_and_features():
         
         return geometry, feature_collection
     
-    # Check for shapefile
+    # Check for imported file (lazy: reads file on-demand, not from session state)
+    imported = st.session_state.get('imported_geodata')
+    import_path = st.session_state.get('uploaded_shapefile')
+    if imported and import_path:
+        geo_type = imported['type']
+        
+        # Load file on-demand with simplification for shapes
+        simplify = 0.01 if geo_type == 'shapes' else 0.0
+        gdf = geometry_service.load_file(import_path, simplify_tolerance=simplify)
+        
+        if geo_type == 'points':
+            # Treat as individual points (like manual point entry)
+            features = []
+            point_id = 1
+            for _, row in gdf.iterrows():
+                geom = row.geometry
+                if geom.geom_type == 'MultiPoint':
+                    for sub_pt in geom.geoms:
+                        feature = ee.Feature(
+                            ee.Geometry.Point([sub_pt.x, sub_pt.y]),
+                            {'point_id': point_id, 'latitude': sub_pt.y, 'longitude': sub_pt.x}
+                        )
+                        features.append(feature)
+                        point_id += 1
+                else:
+                    feature = ee.Feature(
+                        ee.Geometry.Point([geom.x, geom.y]),
+                        {'point_id': point_id, 'latitude': geom.y, 'longitude': geom.x}
+                    )
+                    features.append(feature)
+                    point_id += 1
+            
+            feature_collection = ee.FeatureCollection(features)
+            geometry = feature_collection.geometry()
+            return geometry, feature_collection
+        
+        else:
+            # Treat as shapes (polygons / lines) — already simplified
+            features = []
+            for idx, row in enumerate(gdf.itertuples()):
+                geom_dict = row.geometry.__geo_interface__
+                ee_geom = ee.Geometry(geom_dict)
+                feature = ee.Feature(ee_geom, {
+                    'feature_id': idx + 1,
+                    'source': 'shapefile'
+                })
+                features.append(feature)
+            
+            feature_collection = ee.FeatureCollection(features)
+            geometry = feature_collection.geometry()
+            return geometry, feature_collection
+    
+    # Legacy fallback: Check for shapefile path without parsed geodata
     shapefile_path = st.session_state.get('uploaded_shapefile')
-    if shapefile_path:
+    if shapefile_path and not imported:
         geometry = geometry_service.parse_geometry(shapefile_path, 'shapefile')
-        # Create a FeatureCollection from the geometry
         feature_collection = ee.FeatureCollection([ee.Feature(geometry, {'source': 'shapefile'})])
         return geometry, feature_collection
     
