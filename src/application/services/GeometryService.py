@@ -28,10 +28,14 @@ class GeometryService:
             point_types = {'Point', 'MultiPoint'}
             detected_type = 'points' if set(geom_types).issubset(point_types) else 'shapes'
             
+            # Collect non-geometry column names for Feature ID selection
+            columns = [c for c in gdf.columns if c != 'geometry']
+            
             return {
                 'type': detected_type,
                 'n_features': len(gdf),
-                'geom_types': geom_types
+                'geom_types': geom_types,
+                'columns': columns
             }
             
         except Exception as e:

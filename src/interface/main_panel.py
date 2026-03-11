@@ -469,7 +469,7 @@ def render_shapefile_input():
     
     # --- File path input with Browse button ---
     st.markdown("**Select a geometry file** (`.shp`, `.geojson`, `.kml`, `.zip`):")
-    col1, col2 = st.columns([4, 1])
+    col1, col2 = st.columns([4, 1], vertical_alignment="bottom")
     with col1:
         file_path = st.text_input(
             "File path",
@@ -478,7 +478,6 @@ def render_shapefile_input():
             placeholder="C:\\path\\to\\your\\file.shp"
         )
     with col2:
-        st.write("")  # Spacer for alignment
         if st.button("📂 Browse", key="browse_file_btn", use_container_width=True):
             selected = _open_file_dialog()
             if selected:
@@ -502,6 +501,7 @@ def render_shapefile_input():
                 st.session_state.imported_geodata = None
                 st.session_state.uploaded_shapefile = None
                 st.session_state.import_preview_ready = False
+                st.session_state.feature_id_column = '(auto index)'
                 st.rerun()
         
         if load_clicked:
@@ -514,6 +514,7 @@ def render_shapefile_input():
                         st.session_state.imported_geodata = result
                         st.session_state.uploaded_shapefile = file_path
                         st.session_state.import_preview_ready = False  # Reset preview
+                        st.session_state.feature_id_column = '(auto index)'  # Reset on new file
                         st.rerun()
                     except ValueError as e:
                         st.error(f"❌ {e}")
@@ -529,6 +530,22 @@ def render_shapefile_input():
             st.success(f"✅ Detected: **{n_features} Point(s)**")
         else:
             st.success(f"✅ Detected: **{n_features} Shape(s)** ({', '.join(imported['geom_types'])})")
+        
+        # --- Feature ID Column selector ---
+        file_columns = imported.get('columns', [])
+        id_options = ['(auto index)'] + file_columns
+        current_selection = st.session_state.get('feature_id_column', '(auto index)')
+        # Ensure the stored selection is still valid for the current file
+        if current_selection not in id_options:
+            current_selection = '(auto index)'
+        selected_id_col = st.selectbox(
+            "Feature ID Column",
+            options=id_options,
+            index=id_options.index(current_selection),
+            key="feature_id_column",
+            help="Choose which column to use as the feature identifier in the output CSV. "
+                 "'(auto index)' uses a numeric 1, 2, 3… index."
+        )
         
         # --- Button-triggered map preview (reads file on-demand) ---
         if st.button("🔍 Preview on Map", key="preview_import_map", use_container_width=True):
@@ -1225,6 +1242,10 @@ def build_geometry_and_features():
         simplify = 0.01 if geo_type == 'shapes' else 0.0
         gdf = geometry_service.load_file(import_path, simplify_tolerance=simplify)
         
+        # Determine which column to use as feature identifier
+        id_col = st.session_state.get('feature_id_column', '(auto index)')
+        use_column = id_col != '(auto index)' and id_col in gdf.columns
+        
         if geo_type == 'points':
             # Treat as individual points (like manual point entry)
             features = []
@@ -1233,16 +1254,24 @@ def build_geometry_and_features():
                 geom = row.geometry
                 if geom.geom_type == 'MultiPoint':
                     for sub_pt in geom.geoms:
+                        props = {
+                            'point_id': row[id_col] if use_column else point_id,
+                            'latitude': sub_pt.y,
+                            'longitude': sub_pt.x
+                        }
                         feature = ee.Feature(
-                            ee.Geometry.Point([sub_pt.x, sub_pt.y]),
-                            {'point_id': point_id, 'latitude': sub_pt.y, 'longitude': sub_pt.x}
+                            ee.Geometry.Point([sub_pt.x, sub_pt.y]), props
                         )
                         features.append(feature)
                         point_id += 1
                 else:
+                    props = {
+                        'point_id': row[id_col] if use_column else point_id,
+                        'latitude': geom.y,
+                        'longitude': geom.x
+                    }
                     feature = ee.Feature(
-                        ee.Geometry.Point([geom.x, geom.y]),
-                        {'point_id': point_id, 'latitude': geom.y, 'longitude': geom.x}
+                        ee.Geometry.Point([geom.x, geom.y]), props
                     )
                     features.append(feature)
                     point_id += 1
@@ -1257,8 +1286,13 @@ def build_geometry_and_features():
             for idx, row in enumerate(gdf.itertuples()):
                 geom_dict = row.geometry.__geo_interface__
                 ee_geom = ee.Geometry(geom_dict)
+                # Use selected column value or numeric index as feature_id
+                if use_column:
+                    fid = getattr(row, id_col, idx + 1)
+                else:
+                    fid = idx + 1
                 feature = ee.Feature(ee_geom, {
-                    'feature_id': idx + 1,
+                    'feature_id': fid,
                     'source': 'shapefile'
                 })
                 features.append(feature)
