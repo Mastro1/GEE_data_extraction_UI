@@ -1,124 +1,190 @@
-# 🌍 GEE Data Extractor UI
+# 🌍 GEE Data Extractor UI — Google Earth Engine Satellite Data Extraction Tool
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![Streamlit](https://img.shields.io/badge/Streamlit-FF4B4B?logo=Streamlit&logoColor=white)](https://streamlit.io/)
 [![Google Earth Engine](https://img.shields.io/badge/Google%20Earth%20Engine-4285F4?logo=google-earth&logoColor=white)](https://earthengine.google.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A simple but effective **Google Earth Engine (GEE) Data Extraction Suite** with a modern **Streamlit** interface. Designed for researchers, GIS specialists, and data scientists to streamline the acquisition of historical satellite datasets.
+A **no-code Streamlit dashboard** for extracting historical satellite and climate datasets from **Google Earth Engine (GEE)** — without writing a single line of JavaScript or Python. Built for researchers, GIS analysts, remote sensing specialists, and data scientists who need fast, reproducible access to environmental data such as NDVI timeseries, ERA5-Land climate reanalysis, and CHIRPS precipitation records.
 
-*Note:* This is a work in progress. Main functionalities are working but there are still some bugs to fix and features to add. I really appreciate testers to find them and suggest improvements.
+---
+
+**[Overview](#-overview)** · **[Features](#-key-features)** · **[Datasets](#-supported-datasets)** · **[Installation](#️-installation)** · **[Usage](#-usage)** · **[Architecture](#️-technical-architecture)** · **[Roadmap](#-roadmap)** · **[Contributing](#-contributing)** · **[License](#-license)**
 
 ---
 
 ## 🚀 Overview
 
-![GEE Data Extractor](assets/screenshot.png)
+![GEE Data Extractor UI Screenshot](assets/screenshot.png)
 
-The **GEE Data Extractor** provides a robust pipeline for extracting complex environmental and satellite data without the need for manual coding in the GEE JavaScript code platform or with the Python API. Users can visualize their regions of interest (ROI) instantly and submit high-volume extraction jobs to either Google Drive or direct local storage.
+The **GEE Data Extractor UI** provides a complete end-to-end pipeline for acquiring complex environmental and satellite imagery data directly from Google Earth Engine — no manual coding required. Users can define their region of interest (ROI) visually, configure temporal filters, and submit high-volume extraction jobs to **Google Drive** or **local storage** in just a few clicks.
 
-### ✨ Key Features
+This tool is especially useful for:
+- **Agricultural monitoring** (NDVI, EVI crop health analysis)
+- **Climate research** (ERA5-Land temperature, wind, humidity)
+- **Hydrological studies** (CHIRPS rainfall, GPM precipitation)
+- **GIS automation** workflows requiring batch satellite data downloads
 
-- **Intuitive GUI**: A polished Streamlit dashboard for end-to-end data extraction.
-- **Flexible ROI Selection**:
-  - **Point Coordinates**: Select your Lat/Lon coordinates for extraction.
-  - **File Upload**: Support for Shapefiles (`.shp`), GeoJSON, and KML.
-  - **Administrative Boundaries**: Seamless integration with **GADM** via `pygadm` for country and province-level selection.
-- **Satellites Available** (for the moment):
-  - **Vegetation Indices**: MODIS NDVI & EVI (MOD13Q1).
-  - **Weather & Climate**: ERA5-Land Hourly and Daily reanalysis.
-  - **Precipitation**: CHIRPS Daily high-resolution rainfall data and GPM IMERG V07 (30-Min).
-- **Reproducibility**: Automatic state persistence in `settings.toml` and full job history tracking in `.cache/history.json`.
-- **Passive Map Verification**: Automated map and geometry rendering to confirm input accuracy before submission.
+---
+
+## ✨ Key Features
+
+- **Intuitive No-Code GUI**: A polished Streamlit dashboard covering the full extraction workflow from ROI definition to download.
+- **Flexible Region of Interest (ROI) Selection**:
+  - **Point Coordinates**: Enter Lat/Lon coordinates directly.
+  - **File Upload**: Import Shapefiles (`.shp`), GeoJSON, or KML geometries.
+  - **Administrative Boundaries**: Country and province-level selection via **GADM** integration (`pygadm`).
+- **Multiple Export Targets**: Export to **Google Drive** for large batch jobs or download results **locally** for quick samples.
+- **Reproducibility & History**: Settings are persisted in `config/settings.toml`; full job history is tracked in `.cache/history.json` for instant parameter reloading.
+- **Live Map Verification**: Automated geometry and map rendering to visually confirm your ROI before submitting a job.
+
+---
+
+## 🛰️ Supported Datasets
+
+| Category | Dataset | Source |
+|---|---|---|
+| Vegetation Indices | NDVI & EVI | MODIS MOD13Q1 |
+| Weather & Climate | Temperature, Wind, Humidity | ERA5-Land (Hourly & Daily) |
+| Precipitation | High-resolution rainfall | CHIRPS Daily |
+| Precipitation | Near-real-time global rain | GPM IMERG V07 (30-Min) |
+
+> More datasets are planned — see the [Roadmap](#-roadmap).
 
 ---
 
 ## 🛠️ Installation
 
-### 1. Prerequisites
-- Python 3.8 or higher.
-- A **Google Earth Engine** account ([Sign up here](https://earthengine.google.com/signup/)).
+### Requirements
 
-### 2. Clone the Repository
+- **OS**: Windows, macOS, or Linux
+- **Python**: 3.8 or higher
+- **Google Earth Engine account** ([Sign up here — free for research](https://earthengine.google.com/signup/))
+
+---
+
+### 🪟 Windows — Quick Setup (Recommended, no terminal needed)
+
+This is the easiest path and requires **no prior Python experience**.
+
+1. **Clone or download** the repository.
+2. **Double-click `run.bat`**.
+   - On first run, it will automatically create a Python virtual environment and install all required dependencies.
+   - On subsequent runs, it will simply activate the environment and launch the app.
+3. **Authenticate with Google Earth Engine** (first time only) — a browser window will open automatically asking you to authorize access.
+
+That's it. `run.bat` handles everything.
+
+---
+
+### 🐧🍎 macOS / Linux — Manual Setup
+
+**1. Clone the Repository**
 ```bash
 git clone https://github.com/Mastro1/GEE_data_extraction_UI.git
 cd GEE_data_extraction_UI
 ```
 
-### 3. Install Dependencies
+**2. Create and activate a virtual environment**
+```bash
+python -m venv .venv
+source .venv/bin/activate
+```
 
-  - **Windows**: Simply double-click `run.bat` (it will create a virtual environment and install dependencies).
-  - **Standard**:
-    ```bash
-    pip install -r requirements.txt
-    ```
+**3. Install dependencies**
+```bash
+pip install -r requirements.txt
+```
 
-### 4. Authentication
-Run the following command to authenticate your Google Earth Engine account:
+**4. Authenticate with Google Earth Engine** (first time only)
 ```bash
 python -c "import ee; ee.Authenticate()"
 ```
+Follow the browser prompt to authorize access. Your credentials will be cached locally.
 
 ---
 
 ## 📖 Usage
 
-1. **Start the Application**:
-   For the best experience, use the provided helper scripts which handle environment setup automatically:
-   
-   - **Windows**: Simply double-click `run.bat` (it will create a virtual environment and install dependencies if they are missing).
-   - **Python/Standard**: Alternatively, use the cross-platform runner:
-     ```bash
-     python run.py
-     ```
+### Starting the Application
 
-   *Note: These scripts are optional convenience tools. You can always run the app manually using:*
-   ```bash
-   streamlit run src/interface/app.py
-   ```
-   
-2. **Configure Settings**: Use the sidebar to set your GEE Project ID and default download folders.
-3. **Define WHAT**: Select your satellite dataset (e.g., ERA5-Land) and the specific bands you require.
-4. **Define WHERE**: Select your points, upload a geometry file or select a GADM administrative unit.
-5. **Define WHEN**: Set your start/end years and optional seasonal filters.
-6. **Execute**: Choose "Save to Drive" for large batch jobs or "Download Locally" for immediate samples.
+The easiest way is to use the provided launcher scripts, which handle environment setup automatically:
+
+- **Windows**: Double-click `run.bat`
+- **All platforms**: Run `python run.py`
+
+Alternatively, launch manually:
+
+```bash
+streamlit run src/interface/app.py
+```
+
+### Step-by-Step Workflow
+
+1. **Configure Settings** — Use the sidebar to set your GEE Project ID and default download folders.
+2. **Define WHAT** — Select your satellite dataset (e.g., ERA5-Land Daily) and the specific bands or variables you need.
+3. **Define WHERE** — Enter point coordinates, upload a geometry file (Shapefile, GeoJSON, KML), or pick an administrative boundary using the GADM selector.
+4. **Define WHEN** — Set your start/end date range and apply optional seasonal filters (e.g., extract only June–September).
+5. **Verify** — Inspect the auto-rendered map to confirm your ROI is correct.
+6. **Execute** — Click **Save to Drive** for large batch extractions or **Download Locally** for immediate results.
 
 ---
 
 ## 🏗️ Technical Architecture
 
-The system utilizes a **Local State Architecture** to ensure responsiveness and reliability:
+The application follows a **Local State Architecture** to ensure responsiveness and reliability across sessions.
 
-- **Frontend**: Streamlit (Interface Layer)
-- **Infrastructure**: Python-native GEE API wrapper.
-- **Persistence**: `config/settings.toml` for user preferences.
-- **History**: JSON-based event log storing previous run parameters for instant reloading.
+```
+User Input (Streamlit UI)
+        │
+        ▼
+  State Manager (settings.toml + history.json)
+        │
+        ▼
+  GEE Python API Wrapper
+        │
+        ▼
+  Google Earth Engine Servers
+        │
+   ┌────┴────┐
+   ▼         ▼
+Google     Local
+ Drive    Storage
+```
+
+| Layer | Technology |
+|---|---|
+| Frontend (UI) | Streamlit |
+| GEE Interface | `earthengine-api` (Python) |
+| ROI Handling | `geopandas`, `pygadm` |
+| Persistence | `settings.toml` + `.cache/history.json` |
 
 ---
 
 ## 📈 Roadmap
 
-Future enhancements and upcoming features:
-
-- [ ] **Expand Dataset Catalog**: Integrate additional satellite constellations (e.g., Sentinel-2, Landsat-8/9).
-- [ ] **Spatial Masking**: Add support for uploading and applying custom masks (e.g., crop masks, land cover classification) during extraction.
-- [ ] **Full Session Restore**: Finalize the "Reload Settings" logic to allow seamless recovery of previous work states (WIP, works for the most part).
-
----
-
-## 🔍 SEO & Keywords
-
-`Satellite Data Extraction` | `Google Earth Engine UI` | `Remote Sensing Python` | `Environmental Data Analysis` | `ERA5 Land Data` | `CHIRPS Precipitation Extraction` | `NDVI Timeseries` | `GIS Dashboard` | `Sustainable Agriculture Data`
+- [ ] **Expand Dataset Catalog** — Integrate Sentinel-2, Landsat-8/9, and additional climate products.
+- [ ] **Spatial Masking** — Support for uploading and applying custom masks (e.g., crop masks, land cover layers) during extraction.
+- [ ] **Full Session Restore** — Finalize "Reload Settings" to allow seamless recovery of complete previous work states.
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request or a Issue.
+Contributions, bug reports, and feature suggestions are very welcome! This project is actively maintained and we appreciate community feedback.
+
+To contribute:
+1. **Fork** the repository and create a new branch (`git checkout -b feature/my-feature`).
+2. **Make your changes** and ensure existing functionality is not broken.
+3. **Open a Pull Request** with a clear description of what you changed and why.
+4. **Report bugs** by opening a [GitHub Issue](https://github.com/Mastro1/GEE_data_extraction_UI/issues) with steps to reproduce.
+
+---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
 ---
-*Developed with ❤️ for the Remote Sensing Community.*
+
+*Developed with ❤️ for the Remote Sensing Community — [github.com/Mastro1](https://github.com/Mastro1)*
