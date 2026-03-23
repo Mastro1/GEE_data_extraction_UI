@@ -94,12 +94,14 @@ def apply_loaded_settings():
     
     shapefile_path = loaded.get('uploaded_shapefile')
     if shapefile_path:
+        # Always populate the text input widget key so the path is visible in the UI
+        st.session_state.import_file_path = shapefile_path
         if os.path.exists(shapefile_path):
             st.session_state.uploaded_shapefile = shapefile_path
             st.toast(f"✅ Restored shapefile: {os.path.basename(shapefile_path)}")
         else:
-            st.error(f"⚠️ Could not restore shapefile: {shapefile_path} (File not found)")
             st.session_state.uploaded_shapefile = None
+            st.warning(f"⚠️ File path restored but not found on disk: {shapefile_path}")
             
     if loaded.get('gadm_selection'):
         st.session_state.gadm_selection = loaded['gadm_selection']
