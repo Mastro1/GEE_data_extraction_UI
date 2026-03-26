@@ -1941,6 +1941,1478 @@
           "description": "Daily maximum leaf_area_index_low_vegetation value"
         }
       ]
+    },
+    {
+      "id": "ERA5_HOURLY",
+      "name": "ERA5 Hourly",
+      "ee_collection_name": "ECMWF/ERA5/HOURLY",
+      "description": "ERA5 is the fifth generation ECMWF atmospheric reanalysis of the global climate produced by the Copernicus Climate Change Service (C3S). It provides hourly estimates for a large number of atmospheric, ocean-wave and land-surface quantities covering the Earth on a roughly 31 km grid with 137 levels from the surface up to 80 km altitude. This dataset represents the 'single levels' 2D parameters.",
+      "website": "https://developers.google.com/earth-engine/datasets/catalog/ECMWF_ERA5_HOURLY",
+      "startDate": "1940-01-01",
+      "isHourly": true,
+      "pixelSize": 27830,
+      "bands": [
+        {
+          "name": "dewpoint_temperature_2m",
+          "units": "K",
+          "description": "Temperature to which the air at 2 metres above the surface would have to be cooled for saturation to occur. A measure of humidity."
+        },
+        {
+          "name": "temperature_2m",
+          "units": "K",
+          "description": "Temperature of air at 2m above the surface of land, sea or inland waters, calculated by interpolating between the lowest model level and the Earth's surface."
+        },
+        {
+          "name": "ice_temperature_layer_1",
+          "units": "K",
+          "description": "Sea-ice temperature in layer 1 (0 to 7cm). Part of the four-layer sea-ice slab (0-7cm, 7-28cm, 28-100cm, 100-150cm)."
+        },
+        {
+          "name": "ice_temperature_layer_2",
+          "units": "K",
+          "description": "Sea-ice temperature in layer 2 (7 to 28cm). Part of the four-layer sea-ice slab (0-7cm, 7-28cm, 28-100cm, 100-150cm)."
+        },
+        {
+          "name": "ice_temperature_layer_3",
+          "units": "K",
+          "description": "Sea-ice temperature in layer 3 (28 to 100cm). Part of the four-layer sea-ice slab (0-7cm, 7-28cm, 28-100cm, 100-150cm)."
+        },
+        {
+          "name": "ice_temperature_layer_4",
+          "units": "K",
+          "description": "Sea-ice temperature in layer 4 (100 to 150cm). Part of the four-layer sea-ice slab (0-7cm, 7-28cm, 28-100cm, 100-150cm)."
+        },
+        {
+          "name": "mean_sea_level_pressure",
+          "units": "Pa",
+          "description": "Pressure of the atmosphere adjusted to mean sea level height. Used to identify low and high pressure weather systems."
+        },
+        {
+          "name": "sea_surface_temperature",
+          "units": "K",
+          "description": "Foundation sea surface temperature with no diurnal variations. Before September 2007 from HadISST2; from September 2007 from OSTIA."
+        },
+        {
+          "name": "skin_temperature",
+          "units": "K",
+          "description": "Temperature of the Earth's surface (uppermost surface layer) required to satisfy the surface energy balance."
+        },
+        {
+          "name": "surface_pressure",
+          "units": "Pa",
+          "description": "Pressure of the atmosphere at the surface of land, sea and inland water."
+        },
+        {
+          "name": "u_component_of_wind_100m",
+          "units": "m/s",
+          "description": "Eastward component of wind at 100 metres above the surface of the Earth."
+        },
+        {
+          "name": "v_component_of_wind_100m",
+          "units": "m/s",
+          "description": "Northward component of wind at 100 metres above the surface of the Earth."
+        },
+        {
+          "name": "u_component_of_neutral_wind_10m",
+          "units": "m/s",
+          "description": "Eastward component of the neutral wind at 10m, calculated from surface stress assuming neutrally stratified air."
+        },
+        {
+          "name": "u_component_of_wind_10m",
+          "units": "m/s",
+          "description": "Eastward component of wind at 10 metres above the surface of the Earth."
+        },
+        {
+          "name": "v_component_of_neutral_wind_10m",
+          "units": "m/s",
+          "description": "Northward component of the neutral wind at 10m, calculated from surface stress assuming neutrally stratified air."
+        },
+        {
+          "name": "v_component_of_wind_10m",
+          "units": "m/s",
+          "description": "Northward component of wind at 10 metres above the surface of the Earth."
+        },
+        {
+          "name": "instantaneous_10m_wind_gust",
+          "units": "m/s",
+          "description": "Maximum wind gust at 10m at the specified time, averaged over 3-second intervals as defined by WMO."
+        },
+        {
+          "name": "mean_boundary_layer_dissipation",
+          "units": "W/m^2",
+          "description": "Mean rate of kinetic energy conversion into heat over the whole atmospheric column due to turbulent eddies near the surface and turbulent orographic form drag. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_convective_precipitation_rate",
+          "units": "kg/m^2/s",
+          "description": "Mean rate of precipitation generated by the convection scheme. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_convective_snowfall_rate",
+          "units": "kg/m^2/s",
+          "description": "Mean rate of snowfall generated by the convection scheme. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_eastward_gravity_wave_surface_stress",
+          "units": "N/m^2",
+          "description": "Mean surface stress in the eastward direction associated with orographic blocking and gravity waves. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_eastward_turbulent_surface_stress",
+          "units": "N/m^2",
+          "description": "Mean surface stress in the eastward direction associated with turbulent eddies and orographic form drag. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_evaporation_rate",
+          "units": "kg/m^2/s",
+          "description": "Mean rate of evaporation from the Earth's surface including simplified transpiration. Negative = evaporation, positive = condensation. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_gravity_wave_dissipation",
+          "units": "W/m^2",
+          "description": "Mean rate of kinetic energy conversion into heat due to orographic blocking and gravity wave stress. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_large_scale_precipitation_fraction",
+          "units": "Dimensionless",
+          "description": "Mean fraction of the grid box covered by large-scale precipitation (0-1). Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_large_scale_precipitation_rate",
+          "units": "kg/m^2/s",
+          "description": "Mean rate of precipitation generated by the cloud scheme (large-scale). Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_large_scale_snowfall_rate",
+          "units": "kg/m^2/s",
+          "description": "Mean rate of snowfall generated by the cloud scheme (large-scale). Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_northward_gravity_wave_surface_stress",
+          "units": "N/m^2",
+          "description": "Mean surface stress in the northward direction associated with orographic blocking and gravity waves. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_northward_turbulent_surface_stress",
+          "units": "N/m^2",
+          "description": "Mean surface stress in the northward direction associated with turbulent eddies and orographic form drag. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_potential_evaporation_rate",
+          "units": "kg/m^2/s",
+          "description": "Mean rate of potential evaporation computed for agricultural land as if well watered. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_runoff_rate",
+          "units": "kg/m^2/s",
+          "description": "Mean rate of total runoff (surface + sub-surface). Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_snow_evaporation_rate",
+          "units": "kg/m^2/s",
+          "description": "Mean rate of snow evaporation from the snow-covered area of a grid box. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_snowfall_rate",
+          "units": "kg/m^2/s",
+          "description": "Mean rate of total snowfall (large-scale + convective) at the Earth's surface. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_snowmelt_rate",
+          "units": "kg/m^2/s",
+          "description": "Mean rate of snow melt in the snow-covered area of a grid box. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_sub_surface_runoff_rate",
+          "units": "kg/m^2/s",
+          "description": "Mean rate of sub-surface (underground) runoff. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_surface_direct_short_wave_radiation_flux",
+          "units": "W/m^2",
+          "description": "Mean rate of direct solar radiation reaching the surface. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_surface_direct_short_wave_radiation_flux_clear_sky",
+          "units": "W/m^2",
+          "description": "Mean rate of direct solar radiation reaching the surface assuming clear-sky (cloudless) conditions. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_surface_downward_long_wave_radiation_flux",
+          "units": "W/m^2",
+          "description": "Mean rate of thermal (longwave) radiation from the atmosphere reaching the surface. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_surface_downward_long_wave_radiation_flux_clear_sky",
+          "units": "W/m^2",
+          "description": "Mean rate of thermal radiation from the atmosphere reaching the surface assuming clear-sky conditions. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_surface_downward_short_wave_radiation_flux",
+          "units": "W/m^2",
+          "description": "Mean rate of solar radiation (direct + diffuse) reaching the surface. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_surface_downward_short_wave_radiation_flux_clear_sky",
+          "units": "W/m^2",
+          "description": "Mean rate of solar radiation reaching the surface assuming clear-sky conditions. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_surface_downward_uv_radiation_flux",
+          "units": "W/m^2",
+          "description": "Mean rate of UV radiation (0.20-0.44 µm) reaching the surface. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_surface_latent_heat_flux",
+          "units": "W/m^2",
+          "description": "Mean transfer of latent heat between the Earth's surface and atmosphere through turbulent motion. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_surface_net_long_wave_radiation_flux",
+          "units": "W/m^2",
+          "description": "Mean net thermal (longwave) radiation at the surface (downward minus upward). Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_surface_net_long_wave_radiation_flux_clear_sky",
+          "units": "W/m^2",
+          "description": "Mean net thermal radiation at the surface assuming clear-sky conditions. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_surface_net_short_wave_radiation_flux",
+          "units": "W/m^2",
+          "description": "Mean net solar radiation at the surface (incoming minus reflected). Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_surface_net_short_wave_radiation_flux_clear_sky",
+          "units": "W/m^2",
+          "description": "Mean net solar radiation at the surface assuming clear-sky conditions. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_surface_runoff_rate",
+          "units": "kg/m^2/s",
+          "description": "Mean rate of surface runoff (water draining over the surface). Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_surface_sensible_heat_flux",
+          "units": "W/m^2",
+          "description": "Mean transfer of heat between the Earth's surface and atmosphere through turbulent motion. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_top_downward_short_wave_radiation_flux",
+          "units": "W/m^2",
+          "description": "Mean incoming solar radiation at the top of the atmosphere. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_top_net_long_wave_radiation_flux",
+          "units": "W/m^2",
+          "description": "Mean net thermal radiation at the top of the atmosphere (negative of OLR). Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_top_net_long_wave_radiation_flux_clear_sky",
+          "units": "W/m^2",
+          "description": "Mean thermal radiation emitted to space at the top of the atmosphere assuming clear-sky conditions. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_top_net_short_wave_radiation_flux",
+          "units": "W/m^2",
+          "description": "Mean net solar radiation at the top of the atmosphere (incoming minus outgoing). Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_top_net_short_wave_radiation_flux_clear_sky",
+          "units": "W/m^2",
+          "description": "Mean net solar radiation at the top of the atmosphere assuming clear-sky conditions. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_total_precipitation_rate",
+          "units": "kg/m^2/s",
+          "description": "Mean total precipitation rate (large-scale + convective). Mean over the 1-hour processing period."
+        },
+        {
+          "name": "mean_vertically_integrated_moisture_divergence",
+          "units": "kg/m^2/s",
+          "description": "Mean horizontal divergence of the vertically integrated moisture flux. Positive = diverging, negative = converging. Mean over the 1-hour processing period."
+        },
+        {
+          "name": "clear_sky_direct_solar_radiation_at_surface",
+          "units": "J/m^2",
+          "description": "Accumulated direct solar radiation reaching the surface assuming clear-sky conditions. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "downward_uv_radiation_at_the_surface",
+          "units": "J/m^2",
+          "description": "Accumulated UV radiation (0.20-0.44 µm) reaching the surface. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "forecast_logarithm_of_surface_roughness_for_heat",
+          "units": "Dimensionless",
+          "description": "Natural logarithm of the roughness length for heat, representing surface resistance to heat transfer."
+        },
+        {
+          "name": "instantaneous_surface_sensible_heat_flux",
+          "units": "W/m^2",
+          "description": "Transfer of heat between the Earth's surface and atmosphere through turbulent motion at the specified time."
+        },
+        {
+          "name": "near_ir_albedo_for_diffuse_radiation",
+          "units": "Dimensionless",
+          "description": "Fraction of diffuse solar radiation (0.7-4 µm) reflected by the Earth's surface (snow-free land only). Values 0-1."
+        },
+        {
+          "name": "near_ir_albedo_for_direct_radiation",
+          "units": "Dimensionless",
+          "description": "Fraction of direct solar radiation (0.7-4 µm) reflected by the Earth's surface (snow-free land only). Values 0-1."
+        },
+        {
+          "name": "surface_latent_heat_flux",
+          "units": "J/m^2",
+          "description": "Accumulated transfer of latent heat between the Earth's surface and atmosphere. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "surface_net_solar_radiation",
+          "units": "J/m^2",
+          "description": "Accumulated net solar radiation at the surface (incoming minus reflected). Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "surface_net_solar_radiation_clear_sky",
+          "units": "J/m^2",
+          "description": "Accumulated net solar radiation at the surface assuming clear-sky conditions. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "surface_net_thermal_radiation",
+          "units": "J/m^2",
+          "description": "Accumulated net thermal radiation at the surface (downward minus upward). Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "surface_net_thermal_radiation_clear_sky",
+          "units": "J/m^2",
+          "description": "Accumulated net thermal radiation at the surface assuming clear-sky conditions. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "surface_sensible_heat_flux",
+          "units": "J/m^2",
+          "description": "Accumulated transfer of heat between the Earth's surface and atmosphere through turbulent motion. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "surface_solar_radiation_downward_clear_sky",
+          "units": "J/m^2",
+          "description": "Accumulated solar radiation reaching the surface assuming clear-sky conditions. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "surface_solar_radiation_downwards",
+          "units": "J/m^2",
+          "description": "Accumulated solar radiation (direct + diffuse) reaching the surface. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "surface_thermal_radiation_downward_clear_sky",
+          "units": "J/m^2",
+          "description": "Accumulated thermal radiation from the atmosphere reaching the surface assuming clear-sky conditions. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "surface_thermal_radiation_downwards",
+          "units": "J/m^2",
+          "description": "Accumulated thermal radiation from the atmosphere and clouds reaching the surface. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "toa_incident_solar_radiation",
+          "units": "J/m^2",
+          "description": "Accumulated incoming solar radiation received from the Sun at the top of the atmosphere. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "top_net_solar_radiation",
+          "units": "J/m^2",
+          "description": "Accumulated net solar radiation at the top of the atmosphere (incoming minus outgoing). Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "top_net_solar_radiation_clear_sky",
+          "units": "J/m^2",
+          "description": "Accumulated net solar radiation at the top of the atmosphere assuming clear-sky conditions. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "top_net_thermal_radiation",
+          "units": "J/m^2",
+          "description": "Accumulated net thermal radiation at the top of the atmosphere (negative of OLR). Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "top_net_thermal_radiation_clear_sky",
+          "units": "J/m^2",
+          "description": "Accumulated thermal radiation emitted to space at the top of the atmosphere assuming clear-sky conditions. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "total_sky_direct_solar_radiation_at_surface",
+          "units": "J/m^2",
+          "description": "Accumulated direct solar radiation reaching the surface. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "uv_visible_albedo_for_diffuse_radiation",
+          "units": "Dimensionless",
+          "description": "Fraction of diffuse solar radiation (0.3-0.7 µm) reflected by the Earth's surface (snow-free land only). Values 0-1."
+        },
+        {
+          "name": "uv_visible_albedo_for_direct_radiation",
+          "units": "Dimensionless",
+          "description": "Fraction of direct solar radiation (0.3-0.7 µm) reflected by the Earth's surface (snow-free land only). Values 0-1."
+        },
+        {
+          "name": "cloud_base_height",
+          "units": "m",
+          "description": "Height above the Earth's surface of the base of the lowest cloud layer. Fog in the lowest model layer is excluded."
+        },
+        {
+          "name": "high_cloud_cover",
+          "units": "Dimensionless",
+          "description": "Fraction of grid box covered by cloud at high levels (pressure < 0.45 × surface pressure, approx. above 6km). Values 0-1."
+        },
+        {
+          "name": "low_cloud_cover",
+          "units": "Dimensionless",
+          "description": "Fraction of grid box covered by cloud at low levels (pressure > 0.8 × surface pressure, approx. below 2km). Values 0-1."
+        },
+        {
+          "name": "medium_cloud_cover",
+          "units": "Dimensionless",
+          "description": "Fraction of grid box covered by cloud at medium levels (0.45–0.8 × surface pressure, approx. 2-6km). Values 0-1."
+        },
+        {
+          "name": "total_cloud_cover",
+          "units": "Dimensionless",
+          "description": "Fraction of grid box covered by cloud at any level. Values 0-1."
+        },
+        {
+          "name": "total_column_cloud_ice_water",
+          "units": "kg/m^2",
+          "description": "Total amount of ice in clouds in a column from surface to top of atmosphere. Does not include snow (aggregated ice crystals)."
+        },
+        {
+          "name": "total_column_cloud_liquid_water",
+          "units": "kg/m^2",
+          "description": "Total amount of liquid water in cloud droplets in a column from surface to top of atmosphere. Does not include raindrops."
+        },
+        {
+          "name": "lake_bottom_temperature",
+          "units": "K",
+          "description": "Temperature of water at the bottom of inland water bodies (lakes, reservoirs, rivers and coastal waters)."
+        },
+        {
+          "name": "lake_cover",
+          "units": "Dimensionless",
+          "description": "Fraction of grid box covered by inland water bodies. Values 0-1. Does not vary in time."
+        },
+        {
+          "name": "lake_depth",
+          "units": "m",
+          "description": "Mean depth of inland water bodies from in-situ measurements and indirect estimates. Does not vary in time."
+        },
+        {
+          "name": "lake_ice_depth",
+          "units": "m",
+          "description": "Thickness of ice on inland water bodies."
+        },
+        {
+          "name": "lake_ice_temperature",
+          "units": "K",
+          "description": "Temperature of the uppermost surface of ice on inland water bodies (ice/atmosphere or ice/snow interface)."
+        },
+        {
+          "name": "lake_mix_layer_depth",
+          "units": "m",
+          "description": "Thickness of the uppermost well-mixed layer of inland water bodies with near-constant temperature with depth."
+        },
+        {
+          "name": "lake_mix_layer_temperature",
+          "units": "K",
+          "description": "Temperature of the uppermost well-mixed layer of inland water bodies."
+        },
+        {
+          "name": "lake_shape_factor",
+          "units": "Dimensionless",
+          "description": "Describes the shape of the vertical temperature profile in the thermocline layer of inland water bodies."
+        },
+        {
+          "name": "lake_total_layer_temperature",
+          "units": "K",
+          "description": "Mean temperature of the total water column in inland water bodies."
+        },
+        {
+          "name": "evaporation",
+          "units": "m",
+          "description": "Accumulated evaporation from the Earth's surface including simplified transpiration. Negative = evaporation, positive = condensation. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "potential_evaporation",
+          "units": "m",
+          "description": "Accumulated potential evaporation computed for agricultural land as if well watered. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "runoff",
+          "units": "m",
+          "description": "Accumulated total runoff (surface + sub-surface). Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "sub_surface_runoff",
+          "units": "m",
+          "description": "Accumulated sub-surface (underground) runoff. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "surface_runoff",
+          "units": "m",
+          "description": "Accumulated surface runoff (water draining over the surface). Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "convective_precipitation",
+          "units": "m",
+          "description": "Accumulated precipitation generated by the convection scheme. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "convective_rain_rate",
+          "units": "kg/m^2/s",
+          "description": "Instantaneous rate of rainfall generated by the convection scheme at the specified time."
+        },
+        {
+          "name": "instantaneous_large_scale_surface_precipitation_fraction",
+          "units": "Dimensionless",
+          "description": "Fraction of grid box (0-1) covered by large-scale precipitation at the specified time."
+        },
+        {
+          "name": "large_scale_precipitation",
+          "units": "m",
+          "description": "Accumulated precipitation generated by the cloud scheme (large-scale). Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "large_scale_precipitation_fraction",
+          "units": "seconds",
+          "description": "Accumulated fraction of grid box covered by large-scale precipitation. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "large_scale_rain_rate",
+          "units": "kg/m^2/s",
+          "description": "Instantaneous rate of rainfall generated by the cloud scheme (large-scale) at the specified time."
+        },
+        {
+          "name": "precipitation_type",
+          "units": "Dimensionless",
+          "description": "Type of precipitation: 0=None, 1=Rain, 3=Freezing rain, 5=Snow, 6=Wet snow, 7=Rain+snow mix, 8=Ice pellets."
+        },
+        {
+          "name": "total_column_rain_water",
+          "units": "kg/m^2",
+          "description": "Total amount of raindrop-size water droplets in a column from the surface to the top of the atmosphere."
+        },
+        {
+          "name": "total_precipitation",
+          "units": "m",
+          "description": "Accumulated liquid and frozen water (rain + snow) falling to the Earth's surface. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "convective_snowfall",
+          "units": "m",
+          "description": "Accumulated snowfall generated by the convection scheme. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "convective_snowfall_rate_water_equivalent",
+          "units": "kg/m^2/s",
+          "description": "Instantaneous rate of snowfall generated by the convection scheme at the specified time."
+        },
+        {
+          "name": "large_scale_snowfall",
+          "units": "m",
+          "description": "Accumulated snowfall generated by the cloud scheme (large-scale). Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "large_scale_snowfall_rate_water_equivalent",
+          "units": "kg/m^2/s",
+          "description": "Instantaneous rate of snowfall generated by the cloud scheme (large-scale) at the specified time."
+        },
+        {
+          "name": "snow_albedo",
+          "units": "Dimensionless",
+          "description": "Reflectivity of the snow-covered part of the grid box for solar radiation. Ranges from 0.27-0.38 (high vegetation) to 0.52-0.88 (low vegetation, old to fresh snow)."
+        },
+        {
+          "name": "snow_density",
+          "units": "kg/m^3",
+          "description": "Mass of snow per cubic metre in the snow layer."
+        },
+        {
+          "name": "snow_depth",
+          "units": "m",
+          "description": "Amount of snow from the snow-covered area of a grid box in metres of water equivalent."
+        },
+        {
+          "name": "snow_evaporation",
+          "units": "m",
+          "description": "Accumulated evaporation from snow in the snow-covered area spread over the whole grid box. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "snowfall",
+          "units": "m",
+          "description": "Accumulated total snowfall (large-scale + convective). Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "snowmelt",
+          "units": "m",
+          "description": "Accumulated melted snow from the snow-covered area spread evenly over the whole grid box. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "temperature_of_snow_layer",
+          "units": "K",
+          "description": "Temperature of the snow layer from the ground to the snow-air interface."
+        },
+        {
+          "name": "total_column_snow_water",
+          "units": "kg/m^2",
+          "description": "Total amount of snow (aggregated ice crystals) in a column from the surface to the top of the atmosphere."
+        },
+        {
+          "name": "soil_temperature_level_1",
+          "units": "K",
+          "description": "Temperature of the soil at layer 1 (0-7cm depth)."
+        },
+        {
+          "name": "soil_temperature_level_2",
+          "units": "K",
+          "description": "Temperature of the soil at layer 2 (7-28cm depth)."
+        },
+        {
+          "name": "soil_temperature_level_3",
+          "units": "K",
+          "description": "Temperature of the soil at layer 3 (28-100cm depth)."
+        },
+        {
+          "name": "soil_temperature_level_4",
+          "units": "K",
+          "description": "Temperature of the soil at layer 4 (100-289cm depth)."
+        },
+        {
+          "name": "soil_type",
+          "units": "Dimensionless",
+          "description": "Soil texture classification: 1=Coarse, 2=Medium, 3=Medium fine, 4=Fine, 5=Very fine, 6=Organic, 7=Tropical organic, 0=Non-land. Does not vary in time."
+        },
+        {
+          "name": "vertical_integral_of_divergence_of_cloud_frozen_water_flux",
+          "units": "kg/m^2/s",
+          "description": "Horizontal divergence of the vertically integrated cloud frozen water flux."
+        },
+        {
+          "name": "vertical_integral_of_divergence_of_cloud_liquid_water_flux",
+          "units": "kg/m^2/s",
+          "description": "Horizontal divergence of the vertically integrated cloud liquid water flux."
+        },
+        {
+          "name": "vertical_integral_of_divergence_of_geopotential_flux",
+          "units": "W/m^2",
+          "description": "Horizontal divergence of the vertically integrated geopotential flux."
+        },
+        {
+          "name": "vertical_integral_of_divergence_of_kinetic_energy_flux",
+          "units": "W/m^2",
+          "description": "Horizontal divergence of the vertically integrated kinetic energy flux."
+        },
+        {
+          "name": "vertical_integral_of_divergence_of_mass_flux",
+          "units": "kg/m^2/s",
+          "description": "Horizontal divergence of the vertically integrated mass flux."
+        },
+        {
+          "name": "vertical_integral_of_divergence_of_moisture_flux",
+          "units": "kg/m^2/s",
+          "description": "Horizontal divergence of the vertically integrated moisture flux."
+        },
+        {
+          "name": "vertical_integral_of_divergence_of_ozone_flux",
+          "units": "kg/m^2/s",
+          "description": "Horizontal divergence of the vertically integrated ozone flux."
+        },
+        {
+          "name": "vertical_integral_of_divergence_of_thermal_energy_flux",
+          "units": "W/m^2",
+          "description": "Horizontal divergence of the vertically integrated thermal energy flux."
+        },
+        {
+          "name": "vertical_integral_of_divergence_of_total_energy_flux",
+          "units": "W/m^2",
+          "description": "Horizontal divergence of the vertically integrated total energy flux."
+        },
+        {
+          "name": "vertical_integral_of_eastward_cloud_frozen_water_flux",
+          "units": "kg/m/s",
+          "description": "Eastward horizontal rate of flow of cloud frozen water for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_eastward_cloud_liquid_water_flux",
+          "units": "kg/m/s",
+          "description": "Eastward horizontal rate of flow of cloud liquid water for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_eastward_geopotential_flux",
+          "units": "W/m",
+          "description": "Eastward horizontal rate of flow of geopotential for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_eastward_heat_flux",
+          "units": "W/m",
+          "description": "Eastward horizontal rate of flow of heat for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_eastward_kinetic_energy_flux",
+          "units": "W/m",
+          "description": "Eastward horizontal rate of flow of kinetic energy for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_eastward_mass_flux",
+          "units": "kg/m/s",
+          "description": "Eastward horizontal rate of flow of mass for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_eastward_ozone_flux",
+          "units": "kg/m/s",
+          "description": "Eastward horizontal rate of flow of ozone for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_eastward_total_energy_flux",
+          "units": "W/m",
+          "description": "Eastward horizontal rate of flow of total energy for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_eastward_water_vapour_flux",
+          "units": "kg/m/s",
+          "description": "Eastward horizontal rate of flow of water vapour for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_energy_conversion",
+          "units": "W/m^2",
+          "description": "Conversion between kinetic energy and internal+potential energy for a column. Negative = conversion to kinetic energy."
+        },
+        {
+          "name": "vertical_integral_of_kinetic_energy",
+          "units": "J/m^2",
+          "description": "Vertical integral of kinetic energy (horizontal motion only) for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_mass_of_atmosphere",
+          "units": "kg/m^2",
+          "description": "Total mass of air for a column from surface to top of atmosphere (surface pressure divided by g)."
+        },
+        {
+          "name": "vertical_integral_of_mass_tendency",
+          "units": "kg/m^2/s",
+          "description": "Rate of change of mass of a column of air from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_northward_cloud_frozen_water_flux",
+          "units": "kg/m/s",
+          "description": "Northward horizontal rate of flow of cloud frozen water for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_northward_cloud_liquid_water_flux",
+          "units": "kg/m/s",
+          "description": "Northward horizontal rate of flow of cloud liquid water for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_northward_geopotential_flux",
+          "units": "W/m",
+          "description": "Northward horizontal rate of flow of geopotential for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_northward_heat_flux",
+          "units": "W/m",
+          "description": "Northward horizontal rate of flow of heat for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_northward_kinetic_energy_flux",
+          "units": "W/m",
+          "description": "Northward horizontal rate of flow of kinetic energy for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_northward_mass_flux",
+          "units": "kg/m/s",
+          "description": "Northward horizontal rate of flow of mass for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_northward_ozone_flux",
+          "units": "kg/m/s",
+          "description": "Northward horizontal rate of flow of ozone for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "high_vegetation_cover",
+          "units": "Dimensionless",
+          "description": "Fraction of grid box covered by high vegetation (evergreen/deciduous trees, mixed forest, interrupted forest). Does not vary in time."
+        },
+        {
+          "name": "leaf_area_index_high_vegetation",
+          "units": "Dimensionless",
+          "description": "One-sided green leaf area per unit ground area for high vegetation type."
+        },
+        {
+          "name": "leaf_area_index_low_vegetation",
+          "units": "Dimensionless",
+          "description": "One-sided green leaf area per unit ground area for low vegetation type."
+        },
+        {
+          "name": "low_vegetation_cover",
+          "units": "Dimensionless",
+          "description": "Fraction of grid box covered by low vegetation (crops, grass, shrubs, tundra, etc.). Does not vary in time."
+        },
+        {
+          "name": "type_of_high_vegetation",
+          "units": "Dimensionless",
+          "description": "High vegetation type: 3=Evergreen needleleaf, 4=Deciduous needleleaf, 5=Deciduous broadleaf, 6=Evergreen broadleaf, 18=Mixed forest, 19=Interrupted forest. Does not vary in time."
+        },
+        {
+          "name": "type_of_low_vegetation",
+          "units": "Dimensionless",
+          "description": "Low vegetation type: 1=Crops/mixed farming, 2=Grass, 7=Tall grass, 9=Tundra, 10=Irrigated crops, 11=Semidesert, 13=Bogs/marshes, 16=Evergreen shrubs, 17=Deciduous shrubs, 20=Water/land mixtures. Does not vary in time."
+        },
+        {
+          "name": "air_density_over_the_oceans",
+          "units": "kg/m^3",
+          "description": "Mass of air per cubic metre over the oceans, derived from temperature, specific humidity and pressure at the lowest model level. Only defined over ocean wave model grid."
+        },
+        {
+          "name": "coefficient_of_drag_with_waves",
+          "units": "Dimensionless",
+          "description": "Resistance that ocean waves exert on the atmosphere (friction coefficient), calculated as the ratio of friction velocity squared to neutral wind speed squared."
+        },
+        {
+          "name": "free_convective_velocity_over_the_oceans",
+          "units": "m/s",
+          "description": "Estimated vertical velocity of updraughts generated by free convection, used to estimate wind gust impact on ocean wave growth. Only defined over ocean wave model grid."
+        },
+        {
+          "name": "maximum_individual_wave_height",
+          "units": "m",
+          "description": "Estimated height of the expected highest individual wave within a 20-minute time window. Waves > 2× significant wave height are considered freak waves."
+        },
+        {
+          "name": "mean_direction_of_total_swell",
+          "units": "deg",
+          "description": "Mean direction waves associated with swell are coming from, in degrees true (0=from north, 90=from east)."
+        },
+        {
+          "name": "mean_direction_of_wind_waves",
+          "units": "deg",
+          "description": "Mean direction of wind-generated waves, in degrees true (0=from north, 90=from east)."
+        },
+        {
+          "name": "mean_period_of_total_swell",
+          "units": "seconds",
+          "description": "Average time between consecutive wave crests associated with swell."
+        },
+        {
+          "name": "mean_period_of_wind_waves",
+          "units": "seconds",
+          "description": "Average time between consecutive wave crests generated by local winds."
+        },
+        {
+          "name": "mean_square_slope_of_waves",
+          "units": "Dimensionless",
+          "description": "Average slope of combined wind-sea and swell waves. Higher values indicate steeper, rougher sea surface."
+        },
+        {
+          "name": "mean_wave_direction",
+          "units": "deg",
+          "description": "Mean direction of all ocean/sea surface waves (wind-sea + swell), in degrees true."
+        },
+        {
+          "name": "mean_wave_direction_of_first_swell_partition",
+          "units": "deg",
+          "description": "Mean direction of waves in the first (largest) swell partition, in degrees true."
+        },
+        {
+          "name": "mean_wave_direction_of_second_swell_partition",
+          "units": "deg",
+          "description": "Mean direction of waves in the second swell partition, in degrees true."
+        },
+        {
+          "name": "mean_wave_direction_of_third_swell_partition",
+          "units": "deg",
+          "description": "Mean direction of waves in the third swell partition, in degrees true."
+        },
+        {
+          "name": "mean_wave_period",
+          "units": "seconds",
+          "description": "Average time between consecutive wave crests for all ocean/sea surface waves (wind-sea + swell)."
+        },
+        {
+          "name": "mean_wave_period_based_on_first_moment",
+          "units": "seconds",
+          "description": "Reciprocal of the mean frequency of all wave components, weighted by amplitude. Used to estimate Stokes drift transport."
+        },
+        {
+          "name": "mean_wave_period_based_on_first_moment_for_swell",
+          "units": "seconds",
+          "description": "Reciprocal of the mean frequency of swell wave components, weighted by amplitude."
+        },
+        {
+          "name": "mean_wave_period_based_on_first_moment_for_wind_waves",
+          "units": "seconds",
+          "description": "Reciprocal of the mean frequency of wind-wave components, weighted by amplitude."
+        },
+        {
+          "name": "mean_wave_period_based_on_second_moment_for_swell",
+          "units": "seconds",
+          "description": "Zero-crossing mean wave period for swell, equivalent to the mean time between sea surface zero-crossings."
+        },
+        {
+          "name": "mean_wave_period_based_on_second_moment_for_wind_waves",
+          "units": "seconds",
+          "description": "Zero-crossing mean wave period for wind-generated waves."
+        },
+        {
+          "name": "mean_wave_period_of_first_swell_partition",
+          "units": "seconds",
+          "description": "Mean wave period of the first (largest) swell partition."
+        },
+        {
+          "name": "mean_wave_period_of_second_swell_partition",
+          "units": "seconds",
+          "description": "Mean wave period of the second swell partition."
+        },
+        {
+          "name": "mean_wave_period_of_third_swell_partition",
+          "units": "seconds",
+          "description": "Mean wave period of the third swell partition."
+        },
+        {
+          "name": "mean_zero_crossing_wave_period",
+          "units": "seconds",
+          "description": "Mean time between occasions where the sea/ocean surface crosses mean sea level."
+        },
+        {
+          "name": "model_bathymetry",
+          "units": "m",
+          "description": "Depth of water from the surface to the ocean bottom as used by the ocean wave model."
+        },
+        {
+          "name": "normalized_energy_flux_into_ocean",
+          "units": "Dimensionless",
+          "description": "Normalised vertical flux of turbulent kinetic energy from breaking ocean waves into the ocean. Negative values indicate flux into ocean."
+        },
+        {
+          "name": "normalized_energy_flux_into_waves",
+          "units": "Dimensionless",
+          "description": "Normalised vertical flux of energy from wind into ocean waves. Positive = flux into waves."
+        },
+        {
+          "name": "normalized_stress_into_ocean",
+          "units": "Dimensionless",
+          "description": "Normalised surface stress from air into ocean due to turbulence and breaking waves (excluding wave generation)."
+        },
+        {
+          "name": "ocean_surface_stress_equivalent_10m_neutral_wind_direction",
+          "units": "deg",
+          "description": "Direction from which the neutral wind blows at 10m, in degrees clockwise from true north. Only defined over ocean wave model grid."
+        },
+        {
+          "name": "ocean_surface_stress_equivalent_10m_neutral_wind_speed",
+          "units": "m/s",
+          "description": "Horizontal speed of the neutral wind at 10m used to force the ocean wave model. Only defined over ocean wave model grid."
+        },
+        {
+          "name": "peak_wave_period",
+          "units": "seconds",
+          "description": "Period of the most energetic ocean waves (wind-sea + swell), corresponding to the peak of the frequency spectrum."
+        },
+        {
+          "name": "period_corresponding_to_maximum_individual_wave_height",
+          "units": "seconds",
+          "description": "Period of the expected highest individual wave within a 20-minute time window."
+        },
+        {
+          "name": "significant_height_of_combined_wind_waves_and_swell",
+          "units": "m",
+          "description": "Average height of the highest third of surface ocean/sea waves (wind-sea + swell). Equivalent to 4× the square root of the integrated wave spectrum."
+        },
+        {
+          "name": "significant_height_of_total_swell",
+          "units": "m",
+          "description": "Average height of the highest third of swell waves only."
+        },
+        {
+          "name": "significant_height_of_wind_waves",
+          "units": "m",
+          "description": "Average height of the highest third of wind-generated waves only."
+        },
+        {
+          "name": "significant_wave_height_of_first_swell_partition",
+          "units": "m",
+          "description": "Average height of the highest third of waves in the first (largest) swell partition."
+        },
+        {
+          "name": "significant_wave_height_of_second_swell_partition",
+          "units": "m",
+          "description": "Average height of the highest third of waves in the second swell partition."
+        },
+        {
+          "name": "significant_wave_height_of_third_swell_partition",
+          "units": "m",
+          "description": "Average height of the highest third of waves in the third swell partition."
+        },
+        {
+          "name": "angle_of_sub_gridscale_orography",
+          "units": "rad",
+          "description": "Geographical orientation of sub-grid terrain relative to an eastward axis. Used in the sub-grid orography scheme. Does not vary in time."
+        },
+        {
+          "name": "anisotropy_of_sub_gridscale_orography",
+          "units": "Dimensionless",
+          "description": "Distortion of sub-grid terrain shape from a circle: 1=circle, <1=ellipse, 0=ridge. Does not vary in time."
+        },
+        {
+          "name": "benjamin_feir_index",
+          "units": "Dimensionless",
+          "description": "Index for freak wave probability. Values around 1 indicate increased probability of freak waves."
+        },
+        {
+          "name": "boundary_layer_dissipation",
+          "units": "J/m^2",
+          "description": "Accumulated conversion of kinetic energy into heat due to turbulent eddies and orographic form drag. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "boundary_layer_height",
+          "units": "m",
+          "description": "Depth of air next to the Earth's surface most affected by surface resistance to momentum, heat or moisture transfer."
+        },
+        {
+          "name": "charnock",
+          "units": "Dimensionless",
+          "description": "Accounts for increased aerodynamic roughness as wave heights grow with surface stress. Constant 0.018 without wave coupling."
+        },
+        {
+          "name": "convective_available_potential_energy",
+          "units": "J/kg",
+          "description": "Instability of the atmosphere indicating potential for convection and severe weather. Values >1000 J/kg indicate significant thunderstorm potential."
+        },
+        {
+          "name": "convective_inhibition",
+          "units": "J/kg",
+          "description": "Energy required for convection to commence. Values >200 J/kg indicate convection unlikely even with high CAPE."
+        },
+        {
+          "name": "duct_base_height",
+          "units": "m",
+          "description": "Duct base height as diagnosed from the vertical gradient of atmospheric refractivity."
+        },
+        {
+          "name": "eastward_gravity_wave_surface_stress",
+          "units": "N/m^2*s",
+          "description": "Accumulated surface stress in the eastward direction from orographic blocking and gravity waves. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "eastward_turbulent_surface_stress",
+          "units": "N/m^2*s",
+          "description": "Accumulated surface stress in the eastward direction from turbulent eddies and orographic form drag. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "forecast_albedo",
+          "units": "Dimensionless",
+          "description": "Fraction of solar radiation reflected by the Earth's surface. Snow/ice ~0.8+, land 0.1-0.4, ocean ~0.1. Values 0-1."
+        },
+        {
+          "name": "forecast_surface_roughness",
+          "units": "m",
+          "description": "Aerodynamic roughness length in metres. Higher values cause slower near-surface wind speed."
+        },
+        {
+          "name": "friction_velocity",
+          "units": "m/s",
+          "description": "Theoretical wind speed at the Earth's surface expressing the magnitude of surface stress. Increases with surface roughness."
+        },
+        {
+          "name": "gravity_wave_dissipation",
+          "units": "J/m^2",
+          "description": "Accumulated conversion of kinetic energy into heat due to orographic blocking and gravity waves. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "instantaneous_eastward_turbulent_surface_stress",
+          "units": "N/m^2",
+          "description": "Instantaneous surface stress in the eastward direction from turbulent eddies and orographic form drag at the specified time."
+        },
+        {
+          "name": "instantaneous_moisture_flux",
+          "units": "kg/m^2/s",
+          "description": "Net rate of moisture exchange between the surface and atmosphere at the specified time. Negative = evaporation, positive = condensation."
+        },
+        {
+          "name": "instantaneous_northward_turbulent_surface_stress",
+          "units": "N/m^2",
+          "description": "Instantaneous surface stress in the northward direction from turbulent eddies and orographic form drag at the specified time."
+        },
+        {
+          "name": "k_index",
+          "units": "K",
+          "description": "Thunderstorm potential index: <20=None, 20-25=Isolated, 26-30=Widely scattered, 31-35=Scattered, >35=Numerous thunderstorms."
+        },
+        {
+          "name": "land_sea_mask",
+          "units": "Dimensionless",
+          "description": "Proportion of land vs ocean/water in a grid box. Values >0.5 include land; ≤0.5 are water surfaces. Does not vary in time."
+        },
+        {
+          "name": "mean_vertical_gradient_of_refractivity_inside_trapping_layer",
+          "units": "m^-1",
+          "description": "Mean vertical gradient of atmospheric refractivity inside the trapping layer."
+        },
+        {
+          "name": "minimum_vertical_gradient_of_refractivity_inside_trapping_layer",
+          "units": "m^-1",
+          "description": "Minimum vertical gradient of atmospheric refractivity inside the trapping layer."
+        },
+        {
+          "name": "northward_gravity_wave_surface_stress",
+          "units": "N/m^2*s",
+          "description": "Accumulated surface stress in the northward direction from orographic blocking and gravity waves. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "northward_turbulent_surface_stress",
+          "units": "N/m^2*s",
+          "description": "Accumulated surface stress in the northward direction from turbulent eddies and orographic form drag. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "sea_ice_cover",
+          "units": "Dimensionless",
+          "description": "Fraction of grid box covered by sea ice. Before 1979: HadISST2; 1979-Aug 2007: OSI SAF (409a); from Sep 2007: OSI SAF oper."
+        },
+        {
+          "name": "skin_reservoir_content",
+          "units": "m",
+          "description": "Amount of water in the vegetation canopy and/or thin soil surface layer (intercepted rain, dew). Water leaves by evaporation."
+        },
+        {
+          "name": "slope_of_sub_gridscale_orography",
+          "units": "Dimensionless",
+          "description": "Slope of sub-grid valleys, hills and mountains. 0=flat surface, 0.5=45° slope. Does not vary in time."
+        },
+        {
+          "name": "standard_deviation_of_filtered_subgrid_orography",
+          "units": "m",
+          "description": "Standard deviation of filtered sub-grid orography (scales ~3-22 km). Does not vary in time."
+        },
+        {
+          "name": "standard_deviation_of_orography",
+          "units": "Dimensionless",
+          "description": "Standard deviation of the height of sub-grid valleys, hills and mountains within a grid box. Does not vary in time."
+        },
+        {
+          "name": "total_column_ozone",
+          "units": "kg/m^2",
+          "description": "Total amount of ozone in a column from surface to top of atmosphere (dominated by stratospheric ozone). 1 DU = 2.1415E-5 kg/m^2."
+        },
+        {
+          "name": "total_column_supercooled_liquid_water",
+          "units": "kg/m^2",
+          "description": "Total amount of supercooled water (liquid below 0°C) in a column from surface to top of atmosphere."
+        },
+        {
+          "name": "total_column_water",
+          "units": "kg/m^2",
+          "description": "Sum of water vapour, liquid water, cloud ice, rain and snow in a column from surface to top of atmosphere."
+        },
+        {
+          "name": "total_column_water_vapour",
+          "units": "kg/m^2",
+          "description": "Total amount of water vapour in a column from surface to top of atmosphere."
+        },
+        {
+          "name": "total_totals_index",
+          "units": "K",
+          "description": "Thunderstorm severity index: <44=Unlikely, 44-50=Likely, 51-52=Isolated severe, 53-56=Widely scattered severe, 56-60=Scattered severe."
+        },
+        {
+          "name": "trapping_layer_base_height",
+          "units": "m",
+          "description": "Trapping layer base height as diagnosed from the vertical gradient of atmospheric refractivity."
+        },
+        {
+          "name": "trapping_layer_top_height",
+          "units": "m",
+          "description": "Trapping layer top height as diagnosed from the vertical gradient of atmospheric refractivity."
+        },
+        {
+          "name": "u_component_stokes_drift",
+          "units": "m/s",
+          "description": "Eastward component of surface Stokes drift — net drift velocity due to surface wind waves."
+        },
+        {
+          "name": "v_component_stokes_drift",
+          "units": "m/s",
+          "description": "Northward component of surface Stokes drift — net drift velocity due to surface wind waves."
+        },
+        {
+          "name": "vertical_integral_of_northward_total_energy_flux",
+          "units": "W/m",
+          "description": "Northward horizontal rate of flow of total energy for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_northward_water_vapour_flux",
+          "units": "kg/m/s",
+          "description": "Northward horizontal rate of flow of water vapour for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_potential_and_internal_energy",
+          "units": "J/m^2",
+          "description": "Mass-weighted vertical integral of potential and internal energy for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_potential_internal_and_latent_energy",
+          "units": "J/m^2",
+          "description": "Mass-weighted vertical integral of potential, internal and latent energy for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_temperature",
+          "units": "K/kg/m^2",
+          "description": "Mass-weighted vertical integral of temperature for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_thermal_energy",
+          "units": "J/m^2",
+          "description": "Mass-weighted vertical integral of thermal energy (enthalpy) for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertical_integral_of_total_energy",
+          "units": "J/m^2",
+          "description": "Vertical integral of total energy (internal + potential + kinetic + latent) for a column from surface to top of atmosphere."
+        },
+        {
+          "name": "vertically_integrated_moisture_divergence",
+          "units": "kg/m^2",
+          "description": "Accumulated horizontal divergence of vertically integrated moisture flux. Positive = diverging, negative = converging. Accumulated over the 1-hour period ending at validity time."
+        },
+        {
+          "name": "volumetric_soil_water_layer_1",
+          "units": "Dimensionless",
+          "description": "Volume of water in soil layer 1 (0-7cm depth)."
+        },
+        {
+          "name": "volumetric_soil_water_layer_2",
+          "units": "Dimensionless",
+          "description": "Volume of water in soil layer 2 (7-28cm depth)."
+        },
+        {
+          "name": "volumetric_soil_water_layer_3",
+          "units": "Dimensionless",
+          "description": "Volume of water in soil layer 3 (28-100cm depth)."
+        },
+        {
+          "name": "volumetric_soil_water_layer_4",
+          "units": "Dimensionless",
+          "description": "Volume of water in soil layer 4 (100-289cm depth)."
+        },
+        {
+          "name": "wave_spectral_directional_width",
+          "units": "rad",
+          "description": "Range of wave directions across the full wave spectrum. 0=uni-directional, √2=uniform distribution."
+        },
+        {
+          "name": "wave_spectral_directional_width_for_swell",
+          "units": "rad",
+          "description": "Range of wave directions for swell only. 0=uni-directional, √2=uniform distribution."
+        },
+        {
+          "name": "wave_spectral_directional_width_for_wind_waves",
+          "units": "rad",
+          "description": "Range of wave directions for wind-generated waves only. 0=uni-directional, √2=uniform distribution."
+        },
+        {
+          "name": "wave_spectral_kurtosis",
+          "units": "Dimensionless",
+          "description": "Statistical measure for freak wave forecasting. Positive kurtosis (typical range 0.0-0.06) indicates more frequent extreme sea surface values."
+        },
+        {
+          "name": "wave_spectral_peakedness",
+          "units": "Dimensionless",
+          "description": "Goda's peakedness factor — measure of the relative width of the wave frequency spectrum. Used to compute the Benjamin-Feir Index."
+        },
+        {
+          "name": "wave_spectral_skewness",
+          "units": "Dimensionless",
+          "description": "Statistical measure for freak wave forecasting. Typical range -0.2 to 0.12. Positive = more extreme values above the mean."
+        },
+        {
+          "name": "zero_degree_level",
+          "units": "m",
+          "description": "Height above the Earth's surface where temperature passes from positive to negative. Set to zero when the entire atmosphere is below 0°C."
+        },
+        {
+          "name": "wind_gust_since_previous_post_processing_10m",
+          "units": "m/s",
+          "description": "Maximum 3-second wind gust at 10m as defined by WMO, kept since the last postprocessing step. Includes convection effects from 01/10/2008 onwards."
+        },
+        {
+          "name": "geopotential",
+          "units": "m^2/s^2",
+          "description": "Gravitational potential energy of a unit mass at the surface relative to mean sea level (surface orography). Does not vary in time."
+        },
+        {
+          "name": "maximum_2m_temperature_since_previous_post_processing",
+          "units": "K",
+          "description": "Highest temperature of air at 2m since the last postprocessing step."
+        },
+        {
+          "name": "maximum_total_precipitation_rate_since_previous_post_processing",
+          "units": "kg/m^2/s",
+          "description": "Maximum total precipitation rate (large-scale + convective) since the last postprocessing step."
+        },
+        {
+          "name": "minimum_2m_temperature_since_previous_post_processing",
+          "units": "K",
+          "description": "Lowest temperature of air at 2m since the last postprocessing step."
+        },
+        {
+          "name": "minimum_total_precipitation_rate_since_previous_post_processing",
+          "units": "kg/m^2/s",
+          "description": "Minimum total precipitation rate (large-scale + convective) since the last postprocessing step."
+        },
+        {
+          "name": "divergence_500hPa",
+          "units": "kg/m^2/s",
+          "description": "Divergence of the wind at the 500 hPa pressure level."
+        },
+        {
+          "name": "divergence_850hPa",
+          "units": "kg/m^2/s",
+          "description": "Divergence of the wind at the 850 hPa pressure level."
+        },
+        {
+          "name": "fraction_of_cloud_cover_500hPa",
+          "units": "Dimensionless",
+          "description": "Fraction of cloud cover at the 500 hPa pressure level."
+        },
+        {
+          "name": "fraction_of_cloud_cover_850hPa",
+          "units": "Dimensionless",
+          "description": "Fraction of cloud cover at the 850 hPa pressure level."
+        },
+        {
+          "name": "ozone_mass_mixing_ratio_500hPa",
+          "units": "Dimensionless",
+          "description": "Mass mixing ratio of ozone at the 500 hPa pressure level."
+        },
+        {
+          "name": "ozone_mass_mixing_ratio_850hPa",
+          "units": "Dimensionless",
+          "description": "Mass mixing ratio of ozone at the 850 hPa pressure level."
+        },
+        {
+          "name": "potential_vorticity_500hPa",
+          "units": "K*m^2/kg/s",
+          "description": "Potential vorticity at the 500 hPa pressure level."
+        },
+        {
+          "name": "potential_vorticity_850hPa",
+          "units": "K*m^2/kg/s",
+          "description": "Potential vorticity at the 850 hPa pressure level."
+        },
+        {
+          "name": "relative_humidity_500hPa",
+          "units": "%",
+          "description": "Relative humidity at the 500 hPa pressure level."
+        },
+        {
+          "name": "relative_humidity_850hPa",
+          "units": "%",
+          "description": "Relative humidity at the 850 hPa pressure level."
+        },
+        {
+          "name": "specific_cloud_ice_water_content_500hPa",
+          "units": "Dimensionless",
+          "description": "Specific cloud ice water content at the 500 hPa pressure level."
+        },
+        {
+          "name": "specific_cloud_ice_water_content_850hPa",
+          "units": "Dimensionless",
+          "description": "Specific cloud ice water content at the 850 hPa pressure level."
+        },
+        {
+          "name": "specific_cloud_liquid_water_content_500hPa",
+          "units": "Dimensionless",
+          "description": "Specific cloud liquid water content at the 500 hPa pressure level."
+        },
+        {
+          "name": "specific_cloud_liquid_water_content_850hPa",
+          "units": "Dimensionless",
+          "description": "Specific cloud liquid water content at the 850 hPa pressure level."
+        },
+        {
+          "name": "specific_humidity_500hPa",
+          "units": "Dimensionless",
+          "description": "Specific humidity at the 500 hPa pressure level."
+        },
+        {
+          "name": "specific_humidity_850hPa",
+          "units": "Dimensionless",
+          "description": "Specific humidity at the 850 hPa pressure level."
+        },
+        {
+          "name": "specific_rain_water_content_500hPa",
+          "units": "Dimensionless",
+          "description": "Specific rain water content at the 500 hPa pressure level."
+        },
+        {
+          "name": "specific_rain_water_content_850hPa",
+          "units": "Dimensionless",
+          "description": "Specific rain water content at the 850 hPa pressure level."
+        },
+        {
+          "name": "specific_snow_water_content_500hPa",
+          "units": "Dimensionless",
+          "description": "Specific snow water content at the 500 hPa pressure level."
+        },
+        {
+          "name": "specific_snow_water_content_850hPa",
+          "units": "Dimensionless",
+          "description": "Specific snow water content at the 850 hPa pressure level."
+        },
+        {
+          "name": "temperature_500hPa",
+          "units": "K",
+          "description": "Temperature at the 500 hPa pressure level."
+        },
+        {
+          "name": "temperature_850hPa",
+          "units": "K",
+          "description": "Temperature at the 850 hPa pressure level."
+        },
+        {
+          "name": "u_component_of_wind_500hPa",
+          "units": "m/s",
+          "description": "Eastward component of wind at the 500 hPa pressure level."
+        },
+        {
+          "name": "u_component_of_wind_850hPa",
+          "units": "m/s",
+          "description": "Eastward component of wind at the 850 hPa pressure level."
+        },
+        {
+          "name": "v_component_of_wind_500hPa",
+          "units": "m/s",
+          "description": "Northward component of wind at the 500 hPa pressure level."
+        },
+        {
+          "name": "v_component_of_wind_850hPa",
+          "units": "m/s",
+          "description": "Northward component of wind at the 850 hPa pressure level."
+        },
+        {
+          "name": "vertical_velocity_500hPa",
+          "units": "Pa/s",
+          "description": "Vertical velocity at the 500 hPa pressure level."
+        },
+        {
+          "name": "vertical_velocity_850hPa",
+          "units": "Pa/s",
+          "description": "Vertical velocity at the 850 hPa pressure level."
+        },
+        {
+          "name": "vorticity_500hPa",
+          "units": "K*m^2/kg/s",
+          "description": "Vorticity of the wind at the 500 hPa pressure level."
+        },
+        {
+          "name": "vorticity_850hPa",
+          "units": "K*m^2/kg/s",
+          "description": "Vorticity of the wind at the 850 hPa pressure level."
+        }
+      ]
     }
   ],
   "masks": [
