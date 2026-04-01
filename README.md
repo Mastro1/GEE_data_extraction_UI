@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/banner.png" width="200" alt="GEE Data Extractor Logo">
+  <img src="assets/banner.png" width="600" alt="GEE Data Extractor Logo">
 </p>
 
 # 🌍 GEE Data Extractor UI — Google Earth Engine Satellite Data Extraction Tool
