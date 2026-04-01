@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/banner.png" width="200" alt="GEE Data Extractor Logo">
+</p>
+
 # 🌍 GEE Data Extractor UI — Google Earth Engine Satellite Data Extraction Tool
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
@@ -45,7 +49,7 @@ This tool is especially useful for:
 | Category | Dataset | Source |
 |---|---|---|
 | Vegetation Indices | NDVI & EVI | MODIS MOD13Q1 |
-| Weather & Climate | Temperature, Wind, Humidity | ERA5-Land (Hourly & Daily) |
+| Weather & Climate | Temperature, Wind, Humidity | ERA5 Hourly & ERA5-Land (Hourly & Daily) |
 | Precipitation | High-resolution rainfall | CHIRPS Daily |
 | Precipitation | Near-real-time global rain | GPM IMERG V07 (30-Min) |
 

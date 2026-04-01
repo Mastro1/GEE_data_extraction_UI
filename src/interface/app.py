@@ -12,7 +12,7 @@ from src.interface import sidebar, main_panel
 # Page Configuration
 st.set_page_config(
     page_title="GEE Data Extractor",
-    page_icon="🌍",
+    page_icon="assets/favicon.png",
     layout="wide",
     initial_sidebar_state="expanded",
 )
