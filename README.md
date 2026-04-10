@@ -41,6 +41,7 @@ This tool is especially useful for:
 - **Multiple Export Targets**: Export to **Google Drive** for large batch jobs or download results **locally** for quick samples.
 - **Reproducibility & History**: Settings are persisted in `config/settings.toml`; full job history is tracked in `.cache/history.json` for instant parameter reloading.
 - **Live Map Verification**: Automated geometry and map rendering to visually confirm your ROI before submitting a job.
+- **Auto-Update**: On startup the app checks for a new version on GitHub. If one is available, a banner appears in the sidebar — one click pulls the latest changes and restarts the app in place.
 
 ---
 
@@ -169,7 +170,8 @@ Google     Local
 
 - [ ] **Expand Dataset Catalog** — Integrate Sentinel-2, Landsat-8/9, and additional climate products.
 - [ ] **Spatial Masking** — Support for uploading and applying custom masks (e.g., crop masks, land cover layers) during extraction.
-- [ ] **Full Session Restore** — Finalize "Reload Settings" to allow seamless recovery of complete previous work states.
+- [x] **Full Session Restore** — Finalize "Reload Settings" to allow seamless recovery of complete previous work states.
+- [x] **Auto-Update** — On startup the app checks for a new version on GitHub. If one is available, a banner appears in the sidebar — one click pulls the latest changes and restarts the app in place.
 
 ---
 
