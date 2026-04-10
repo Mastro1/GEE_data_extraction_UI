@@ -16,6 +16,9 @@ class UpdateInfo:
     error: Optional[str] = None
 
 
+REMOTE_BRANCH = "dev"  # TODO: change to "main" before merging to production
+
+
 class UpdateChecker:
     def __init__(self):
         self.repo_root = Path(__file__).parent.parent.parent.parent
@@ -61,7 +64,7 @@ class UpdateChecker:
 
         local_commit = repo.head.commit.hexsha
         try:
-            remote_commit = repo.commit("origin/dev").hexsha
+            remote_commit = repo.commit(f"origin/{REMOTE_BRANCH}").hexsha
         except Exception:
             return UpdateInfo(
                 update_available=False,
@@ -104,7 +107,7 @@ class UpdateChecker:
             )
 
         try:
-            repo.remotes.origin.pull()
+            repo.remotes.origin.pull(REMOTE_BRANCH)
         except git.exc.GitCommandError as e:
             return False, f"git pull failed: {e}"
         except Exception as e:

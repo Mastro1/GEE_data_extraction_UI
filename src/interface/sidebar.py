@@ -213,9 +213,11 @@ def render_history_loader():
 
 
 def render_update_banner():
-    """Renders an update notification banner if a newer version is available on origin/main."""
+    """Renders an update notification banner if a newer version is available."""
     update_info = st.session_state.get('update_info')
     if update_info is None or not update_info.update_available:
+        return
+    if st.session_state.get('update_dismissed'):
         return
 
     st.info(
@@ -228,8 +230,14 @@ def render_update_banner():
             "Uncommitted local changes detected. Run `git stash` in your terminal before updating.",
             icon="⚠️",
         )
-    if st.button("Update & Restart", type="primary", use_container_width=True, key="btn_update"):
-        _do_update()
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Update & Restart", type="primary", use_container_width=True, key="btn_update"):
+            _do_update()
+    with col2:
+        if st.button("Dismiss", use_container_width=True, key="btn_dismiss"):
+            st.session_state['update_dismissed'] = True
+            st.rerun()
     st.divider()
 
 
