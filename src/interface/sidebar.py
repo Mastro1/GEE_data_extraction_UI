@@ -4,6 +4,7 @@ Contains: Authentication status, Settings popup, Task monitor, History loader.
 """
 import streamlit as st
 import ee
+from pathlib import Path
 from src.domain.extractors.BaseExtractor import BaseExtractor
 from src.infrastructure.persistence.HistoryManager import HistoryManager
 
@@ -83,6 +84,12 @@ def render_auth_status(settings_service):
 @st.dialog("⚙️ Settings")
 def settings_dialog(settings_service):
     """Settings popup modal dialog."""
+    try:
+        version = (Path(__file__).parent.parent.parent / "VERSION").read_text().strip()
+    except Exception:
+        version = "unknown"
+    st.markdown(f"<p style='color:#888888; font-size:0.85rem; margin-top:-12px; margin-bottom:8px;'>v{version}</p>", unsafe_allow_html=True)
+
     st.markdown("### Google Earth Engine")
     
     # GEE Project ID
