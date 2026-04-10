@@ -230,14 +230,11 @@ def render_update_banner():
             "Uncommitted local changes detected. Run `git stash` in your terminal before updating.",
             icon="⚠️",
         )
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Update & Restart", type="primary", use_container_width=True, key="btn_update"):
-            _do_update()
-    with col2:
-        if st.button("Dismiss", use_container_width=True, key="btn_dismiss"):
-            st.session_state['update_dismissed'] = True
-            st.rerun()
+    if st.button("Dismiss", use_container_width=True, key="btn_dismiss"):
+        st.session_state['update_dismissed'] = True
+        st.rerun()
+    if st.button("Update & Restart", type="primary", use_container_width=True, key="btn_update"):
+        _do_update()
     st.divider()
 
 
