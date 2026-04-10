@@ -16,7 +16,7 @@ class UpdateInfo:
     error: Optional[str] = None
 
 
-REMOTE_BRANCH = "dev"  # TODO: change to "main" before merging to production
+REMOTE_BRANCH = "main"
 
 
 class UpdateChecker:
