@@ -270,7 +270,11 @@ def render_data_source_section(satellites: list, loaded_settings: dict):
         
         # For each selected band, show reducer option
         if selected_bands:
-            st.markdown("**Reducer per Variable:**")
+            st.markdown(
+                "**Reducer per Variable:** ", help="When extracting data over a shape or buffer, multiple pixels may fall within it. "
+                "The reducer defines how those pixel values are aggregated — e.g. &quot;mean&quot; averages all "
+                "pixel values within the shape, &quot;max&quot; takes the highest value, etc."
+            )
             reducers = ['mean', 'sum', 'max', 'min', 'median', 'first']
             
             for band_name in selected_bands:
