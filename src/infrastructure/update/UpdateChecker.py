@@ -126,5 +126,5 @@ class UpdateChecker:
 
     def restart_app(self):
         run_py = self.repo_root / "run.py"
-        subprocess.Popen([sys.executable, str(run_py)])
+        subprocess.Popen([sys.executable, str(run_py), "--server.headless", "true"])
         os._exit(0)
