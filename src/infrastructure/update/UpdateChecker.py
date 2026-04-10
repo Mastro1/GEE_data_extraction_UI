@@ -1,6 +1,5 @@
 import git
 import sys
-import os
 import subprocess
 from pathlib import Path
 from dataclasses import dataclass
@@ -125,8 +124,6 @@ class UpdateChecker:
         return True, "Update complete. Restarting..."
 
     def restart_app(self):
-        try:
-            os.execv(sys.executable, [sys.executable] + sys.argv)
-        except Exception:
-            subprocess.Popen([sys.executable] + sys.argv)
-            sys.exit(0)
+        run_py = self.repo_root / "run.py"
+        subprocess.Popen([sys.executable, str(run_py)])
+        sys.exit(0)
