@@ -11,6 +11,7 @@ from src.infrastructure.persistence.HistoryManager import HistoryManager
 def render(settings_service):
     """Renders the sidebar components."""
     with st.sidebar:
+        render_update_banner()
         st.header("🎮 Control Center")
         
         # 1. Authentication Status
@@ -209,3 +210,47 @@ def render_history_loader():
         st.session_state['loaded_settings'] = selected_run
         st.success("Settings loaded!")
         st.rerun()
+
+
+def render_update_banner():
+    """Renders an update notification banner if a newer version is available."""
+    update_info = st.session_state.get('update_info')
+    if update_info is None or not update_info.update_available:
+        return
+    if st.session_state.get('update_dismissed'):
+        return
+
+    st.info(
+        f"**Update available:** v{update_info.remote_version}  \n"
+        f"You are on v{update_info.current_version}",
+        icon="🆕",
+    )
+    if update_info.has_local_changes:
+        st.warning(
+            "Uncommitted local changes detected. Run `git stash` in your terminal before updating.",
+            icon="⚠️",
+        )
+    if st.button("Dismiss", use_container_width=True, key="btn_dismiss"):
+        st.session_state['update_dismissed'] = True
+        st.rerun()
+    if st.button("Update & Restart", type="primary", use_container_width=True, key="btn_update"):
+        _do_update()
+    st.divider()
+
+
+def _do_update():
+    """Pulls latest changes, reinstalls requirements, and restarts the app."""
+    import time
+    checker = st.session_state.get('update_checker')
+    if not checker:
+        st.error("Update service unavailable. Please restart the app manually.")
+        return
+    with st.spinner("Pulling latest changes..."):
+        success, message = checker.perform_update()
+    if success:
+        st.success(message)
+        time.sleep(1.5)
+        checker.restart_app()
+    else:
+        st.error(message)
+        st.session_state.pop('update_info', None)

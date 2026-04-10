@@ -7,6 +7,7 @@ from pathlib import Path
 root_path = Path(__file__).parent.parent.parent
 sys.path.append(str(root_path))
 from src.infrastructure.configuration.SettingsService import SettingsService
+from src.infrastructure.update.UpdateChecker import UpdateChecker
 from src.interface import sidebar, main_panel
 
 # Page Configuration
@@ -22,7 +23,13 @@ def main():
     
     # Initialize Services
     settings_service = SettingsService()
-    
+
+    # Check for updates once per session (not on every Streamlit rerun)
+    if 'update_info' not in st.session_state:
+        checker = UpdateChecker()
+        st.session_state['update_info'] = checker.check_for_updates()
+        st.session_state['update_checker'] = checker
+
     # Load CSS (Optional - for custom styling if needed later)
     # with open("assets/style.css") as f:
     #     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
