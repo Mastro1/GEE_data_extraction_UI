@@ -53,6 +53,14 @@ class UpdateChecker:
 
         try:
             repo.remotes.origin.fetch()
+        except git.exc.GitCommandNotFound:
+            return UpdateInfo(
+                update_available=False,
+                current_version=current_version,
+                remote_version="unknown",
+                has_local_changes=has_local_changes,
+                error="git_not_found",
+            )
         except Exception as e:
             return UpdateInfo(
                 update_available=False,

@@ -222,7 +222,20 @@ def render_history_loader():
 def render_update_banner():
     """Renders an update notification banner if a newer version is available."""
     update_info = st.session_state.get('update_info')
-    if update_info is None or not update_info.update_available:
+    if update_info is None:
+        return
+
+    if update_info.error == "git_not_found":
+        st.warning(
+            "**Auto-update unavailable** — Git was not found on your system.  \n"
+            "To receive future updates, please install Git from [git-scm.com](https://git-scm.com) "
+            "or re-download the application directly from GitHub.",
+            icon="⚠️",
+        )
+        st.divider()
+        return
+
+    if not update_info.update_available:
         return
     if st.session_state.get('update_dismissed'):
         return
