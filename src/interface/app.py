@@ -9,6 +9,7 @@ sys.path.append(str(root_path))
 from src.infrastructure.configuration.SettingsService import SettingsService
 from src.infrastructure.update.UpdateChecker import UpdateChecker
 from src.interface import sidebar, main_panel
+from src.interface.map_utils import inject_drag_handle
 
 # Page Configuration
 st.set_page_config(
@@ -30,13 +31,12 @@ def main():
         st.session_state['update_info'] = checker.check_for_updates()
         st.session_state['update_checker'] = checker
 
-    # Load CSS (Optional - for custom styling if needed later)
-    # with open("assets/style.css") as f:
-    #     st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
-
     # Render Interface
     sidebar.render(settings_service)
     main_panel.render(settings_service)
+
+    # Inject drag-to-resize handles for all map iframes
+    inject_drag_handle()
 
 if __name__ == "__main__":
     main()

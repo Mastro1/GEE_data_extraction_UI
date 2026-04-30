@@ -9,8 +9,6 @@ Contains the primary extraction pipeline UI with 4 sections:
 import streamlit as st
 import ee
 import json
-import folium
-from streamlit_folium import st_folium
 from pathlib import Path
 import os
 import threading
@@ -19,6 +17,14 @@ from datetime import datetime
 from src.infrastructure.configuration.SettingsService import SettingsService
 from src.application.services.GeometryService import GeometryService
 from src.infrastructure.persistence.HistoryManager import HistoryManager
+from src.interface.map_utils import (
+    create_base_map, add_geojson_overlay, add_markers, render_map,
+    render_map_display, gdf_to_geojson, extract_gadm_display_columns,
+    fetch_gadm_boundaries,
+)
+from src.infrastructure.utils.maps_url_parser import (
+    parse_google_maps_url, is_google_maps_url,
+)
 
 
 def load_satellites():
@@ -116,6 +122,7 @@ def apply_loaded_settings():
         st.session_state.gadm_country_loaded = None 
         st.session_state.gadm_level_loaded = None
         st.session_state.gadm_gdf = None
+        st.session_state.pop('gadm_map_visible', None)
         
         # Restore specific regions if saved
         if loaded.get('gadm_regions'):
@@ -331,7 +338,7 @@ def render_point_input(loaded_settings: dict):
     st.subheader("Point Selection")
     
     # Manual entry
-    st.markdown("**Add point manually or upload CSV:**")
+    st.markdown("**Add point manually:**")
     col1, col2, col3 = st.columns([2, 2, 1])
     with col1:
         lat = st.number_input("Latitude", value=0.0, min_value=-90.0, max_value=90.0, step=0.01, key="lat_input")
@@ -347,6 +354,45 @@ def render_point_input(loaded_settings: dict):
                     st.session_state.selected_points.append(point)
                     st.success(f"Added point ({lat}, {lon})")
                     st.rerun()
+
+    # Google Maps Link
+    with st.expander("🌐 Add from Google Maps Link"):
+        st.caption(
+            "Paste a Google Maps link to extract its coordinates. "
+            "Works with both full URLs and short share links."
+        )
+        gmaps_url = st.text_input(
+            "Google Maps URL",
+            key="gmaps_url_input",
+            placeholder="https://maps.app.goo.gl/... or https://www.google.com/maps/...",
+            label_visibility="collapsed",
+        )
+        if st.button("🔗 Add Point", key="add_gmaps_point_btn", use_container_width=True):
+            if not gmaps_url or not gmaps_url.strip():
+                st.warning("Please paste a Google Maps link first.")
+            elif not is_google_maps_url(gmaps_url):
+                st.error("❌ This doesn't appear to be a Google Maps link.")
+            else:
+                with st.spinner("Resolving link..."):
+                    coords = parse_google_maps_url(gmaps_url)
+                if coords:
+                    lat, lon = round(coords[0], 6), round(coords[1], 6)
+                    point = {'lat': lat, 'lon': lon}
+                    if point not in st.session_state.selected_points:
+                        st.session_state.selected_points.append(point)
+                        st.success(f"✅ Added point ({lat}, {lon})")
+                        st.rerun()
+                    else:
+                        st.info("This point already exists in your selection.")
+                else:
+                    st.error(
+                        "❌ Could not extract coordinates from this link. "
+                        "Try copying the full URL from your browser's address bar."
+                    )
+        st.caption(
+            "💡 **Tip:** Right-click a location on Google Maps → **Share** → copy the link. "
+            "Or simply copy the URL from your browser."
+        )
 
     # CSV Upload
     with st.expander("📂 Upload points from CSV"):
@@ -391,18 +437,12 @@ def render_point_input(loaded_settings: dict):
         center = [st.session_state.selected_points[-1]['lat'], 
                   st.session_state.selected_points[-1]['lon']]
     
-    m = folium.Map(location=center, zoom_start=3)
-    
+    m = create_base_map(center=center, zoom=3)
+
     # Add existing points to map
-    for i, pt in enumerate(st.session_state.selected_points):
-        folium.Marker(
-            [pt['lat'], pt['lon']],
-            popup=f"Point {i+1}: ({pt['lat']:.4f}, {pt['lon']:.4f})",
-            icon=folium.Icon(color='red', icon='info-sign')
-        ).add_to(m)
-    
-    # Display map with click capture
-    map_data = st_folium(m, height=300, width=None, key="point_map")
+    add_markers(m, st.session_state.selected_points, color='red')
+
+    map_data = render_map(m, key="point_map")
     
     # Handle map click
     if map_data and map_data.get('last_clicked'):
@@ -567,46 +607,23 @@ def render_shapefile_input():
                     
                     centroid = gdf.geometry.unary_union.centroid
                     center = [centroid.y, centroid.x]
-                    m = folium.Map(location=center, zoom_start=5)
-                    
+                    m = create_base_map(center=center, zoom=5)
+
                     if geo_type == 'points':
-                        for i, row in gdf.iterrows():
+                        # Flatten MultiPoint geometries into individual points
+                        flat_points = []
+                        for _, row in gdf.iterrows():
                             pt = row.geometry
                             if pt.geom_type == 'MultiPoint':
-                                for sub_pt in pt.geoms:
-                                    folium.Marker(
-                                        [sub_pt.y, sub_pt.x],
-                                        popup=f"Point ({sub_pt.y:.4f}, {sub_pt.x:.4f})",
-                                        icon=folium.Icon(color='blue', icon='info-sign')
-                                    ).add_to(m)
+                                flat_points.extend(pt.geoms)
                             else:
-                                folium.Marker(
-                                    [pt.y, pt.x],
-                                    popup=f"Point ({pt.y:.4f}, {pt.x:.4f})",
-                                    icon=folium.Icon(color='blue', icon='info-sign')
-                                ).add_to(m)
+                                flat_points.append(pt)
+                        add_markers(m, flat_points, color='blue')
                     else:
-                        geojson_data = json.loads(gdf.to_json())
-                        folium.GeoJson(
-                            geojson_data,
-                            style_function=lambda x: {
-                                'fillColor': '#3388ff',
-                                'color': '#3388ff',
-                                'weight': 2,
-                                'fillOpacity': 0.3
-                            },
-                            highlight_function=lambda x: {
-                                'fillColor': '#ffcc00',
-                                'color': '#ffcc00',
-                                'weight': 3,
-                                'fillOpacity': 0.6
-                            }
-                        ).add_to(m)
+                        geojson_data = gdf_to_geojson(gdf)
+                        add_geojson_overlay(m, geojson_data)
                     
-                    bounds = gdf.total_bounds
-                    m.fit_bounds([[bounds[1], bounds[0]], [bounds[3], bounds[2]]])
-                    
-                    st_folium(m, height=400, width=None, key="import_preview_map")
+                    render_map_display(m, key="import_preview_map", fit_bounds=gdf.total_bounds)
                 except Exception as map_err:
                     st.warning(f"Map preview unavailable: {str(map_err)[:100]}")
 
@@ -615,9 +632,9 @@ def render_gadm_input():
     """GADM administrative boundary selection with map visualization."""
     st.subheader("GADM Administrative Boundaries")
     
-    # Import pygadm
+    # Check pygadm availability
     try:
-        import pygadm
+        import pygadm  # noqa: F401 — availability check only
     except ImportError:
         st.error("pygadm is not installed. Run: pip install pygadm")
         return
@@ -638,157 +655,130 @@ def render_gadm_input():
         key="gadm_level"
     )
     
-    # Load button
+    # Load / Clear buttons
     if country:
         col1, col2 = st.columns([1, 1])
         with col1:
             load_clicked = st.button("🔍 Load Boundary", use_container_width=True)
+        with col2:
+            clear_clicked = st.button("🗑️ Clear", use_container_width=True)
         
-        if load_clicked or st.session_state.get('gadm_gdf') is not None:
-            with st.spinner(f"Loading {country} boundaries..."):
+        if clear_clicked:
+            # Reset all GADM state so the map disappears
+            for key in ['gadm_gdf', 'gadm_country_loaded', 'gadm_level_loaded',
+                        'gadm_selection', 'gadm_map_visible']:
+                st.session_state.pop(key, None)
+            return
+        
+        # --- Data loading phase: only runs on explicit user action ---
+        country_changed = st.session_state.get('gadm_country_loaded') != country
+        level_changed = st.session_state.get('gadm_level_loaded') != admin_level
+        
+        if load_clicked:
+            # User explicitly requested a load — always proceed
+            try:
+                with st.spinner(f"Loading {country} boundaries..."):
+                    gdf = fetch_gadm_boundaries(country, admin_level)
+                
+                # Store in session state
+                st.session_state.gadm_gdf = gdf
+                st.session_state.gadm_country_loaded = country
+                st.session_state.gadm_level_loaded = admin_level
+                st.session_state.gadm_map_visible = True
+                
+            except ValueError as e:
+                st.error(f"❌ Could not find '{country}'. Check spelling.")
+                st.caption(f"Error: {str(e)[:200]}")
+                return
+            except Exception as e:
+                st.error(f"❌ Error loading boundary: {str(e)}")
+                return
+        
+        elif country_changed or level_changed:
+            # Inputs changed but user didn't click Load — clear stale data and prompt
+            if st.session_state.get('gadm_gdf') is not None:
+                st.info("Country or admin level changed. Click **🔍 Load Boundary** to reload.")
+                for key in ['gadm_gdf', 'gadm_country_loaded', 'gadm_level_loaded',
+                            'gadm_selection', 'gadm_map_visible']:
+                    st.session_state.pop(key, None)
+                return
+        
+        # --- Rendering phase: only when data is loaded and map is visible ---
+        gdf = st.session_state.get('gadm_gdf')
+        if gdf is not None and st.session_state.get('gadm_map_visible'):
+            try:
+                # Show info
+                loaded_country = st.session_state.get('gadm_country_loaded', country)
+                st.success(f"✅ Loaded {len(gdf)} region(s) for {loaded_country}")
+                
+                # If we have subdivisions, let user select specific ones
+                loaded_level = st.session_state.get('gadm_level_loaded', 0)
+                if loaded_level > 0 and len(gdf) > 1:
+                    name_col = f"NAME_{loaded_level}"
+                    if name_col in gdf.columns:
+                        region_names = gdf[name_col].tolist()
+                        
+                        selected_regions = st.multiselect(
+                            f"Select specific regions (optional)",
+                            options=region_names,
+                            default=[],
+                            key="gadm_regions",
+                            help="Leave empty to use entire country"
+                        )
+                        
+                        if selected_regions:
+                            gdf = gdf[gdf[name_col].isin(selected_regions)]
+                            st.info(f"Selected {len(gdf)} region(s)")
+                
+                # Display map
+                st.markdown("**Boundary Preview:**")
+                
                 try:
-                    # Load GADM data
-                    if load_clicked or st.session_state.get('gadm_country_loaded') != country:
-                        if admin_level > 0:
-                            # Get subdivisions
-                            gdf = pygadm.Items(name=country, content_level=admin_level)
-                        else:
-                            # Just the country
-                            gdf = pygadm.Items(name=country)
-                        
-                        # Store in session state
-                        st.session_state.gadm_gdf = gdf
-                        st.session_state.gadm_country_loaded = country
-                        st.session_state.gadm_level_loaded = admin_level
-                    else:
-                        gdf = st.session_state.gadm_gdf
+                    # Get centroid for map center
+                    centroid = gdf.geometry.unary_union.centroid
+                    center = [centroid.y, centroid.x]
                     
-                    # Show info
-                    st.success(f"✅ Loaded {len(gdf)} region(s) for {country}")
+                    # Create folium map with satellite base
+                    m = create_base_map(center=center, zoom=5)
+
+                    # Convert to GeoJSON and detect display columns
+                    geojson_data = gdf_to_geojson(gdf)
+                    display_cols = extract_gadm_display_columns(geojson_data)
                     
-                    # If we have subdivisions, let user select specific ones
-                    if admin_level > 0 and len(gdf) > 1:
-                        # Get name column (usually NAME_1, NAME_2, etc.)
-                        name_col = f"NAME_{admin_level}"
-                        if name_col in gdf.columns:
-                            region_names = gdf[name_col].tolist()
-                            
-                            selected_regions = st.multiselect(
-                                f"Select specific regions (optional)",
-                                options=region_names,
-                                default=[],
-                                key="gadm_regions",
-                                help="Leave empty to use entire country"
-                            )
-                            
-                            if selected_regions:
-                                gdf = gdf[gdf[name_col].isin(selected_regions)]
-                                st.info(f"Selected {len(gdf)} region(s)")
+                    # Build tooltip: use the most specific NAME column
+                    tooltip_fields = None
+                    tooltip_aliases = None
+                    name_cols = [c for c in display_cols if "NAME" in c]
+                    if name_cols:
+                        tooltip_fields = [name_cols[-1]]
+                        tooltip_aliases = ["Region:"]
                     
-                    # Display map
-                    st.markdown("**Boundary Preview:**")
+                    # Build popup: show all NAME/GID columns
+                    popup_fields = display_cols if display_cols else None
                     
-                    try:
-                        # Get centroid for map center
-                        centroid = gdf.geometry.unary_union.centroid
-                        center = [centroid.y, centroid.x]
-                        
-                        # Create folium map
-                        m = folium.Map(location=center, zoom_start=5)
-                        
-                        # Convert to GeoJSON including properties to enable tooltips/popups
-                        # WORKAROUND: Cast to vanilla GeoDataFrame to avoid pygadm subclass issues during to_json()
-                        # The pygadm class seems to interfere with pandas/geopandas serialization
-                        import geopandas as gpd
-                        gdf_vanilla = gpd.GeoDataFrame(gdf, geometry='geometry')
-                        
-                        # Using to_json() ensures we get a standard GeoJSON dictionary
-                        geojson_data = json.loads(gdf_vanilla.to_json())
-                        
-                        # Modular Column Detection
-                        # We want to show all available NAME_X and GID_X columns (0 to 3)
-                        available_properties = []
-                        if 'features' in geojson_data and len(geojson_data['features']) > 0:
-                            first_props = geojson_data['features'][0]['properties']
-                            available_properties = list(first_props.keys())
-                        
-                        # Filter for interesting columns (NAME_X, GID_X)
-                        display_cols = []
-                        for i in range(4): # Check levels 0, 1, 2, 3
-                            # Add NAME column if exists
-                            name_col = f"NAME_{i}"
-                            if name_col in available_properties:
-                                display_cols.append(name_col)
-                            
-                            # Add GID column if exists
-                            gid_col = f"GID_{i}"
-                            if gid_col in available_properties:
-                                display_cols.append(gid_col)
-                        
-                        # Configure Tooltip (Hover)
-                        # Use the most specific NAME column available (last one in the list)
-                        tooltip = None
-                        name_cols = [c for c in display_cols if "NAME" in c]
-                        if name_cols:
-                            tooltip_field = name_cols[-1]
-                            tooltip = folium.GeoJsonTooltip(
-                                fields=[tooltip_field],
-                                aliases=["Region:"],
-                                style="font-weight: bold; color: #333;",
-                                sticky=True
-                            )
-                        
-                        # Configure Popup (Click)
-                        # Show all identified columns
-                        popup = None
-                        if display_cols:
-                            popup = folium.GeoJsonPopup(
-                                fields=display_cols,
-                                aliases=display_cols,
-                                localize=True
-                            )
-                        
-                        # Add GeoJson layer with interactivity
-                        folium.GeoJson(
-                            geojson_data,
-                            style_function=lambda x: {
-                                'fillColor': '#3388ff',
-                                'color': '#3388ff',
-                                'weight': 2,
-                                'fillOpacity': 0.3
-                            },
-                            highlight_function=lambda x: {
-                                'fillColor': '#ffcc00', 
-                                'color': '#ffcc00',
-                                'weight': 3,
-                                'fillOpacity': 0.6
-                            },
-                            tooltip=tooltip,
-                            popup=popup
-                        ).add_to(m)
-                        
-                        # Fit bounds
-                        bounds = gdf.total_bounds  # [minx, miny, maxx, maxy]
-                        m.fit_bounds([[bounds[1], bounds[0]], [bounds[3], bounds[2]]])
-                        
-                        # Display map
-                        st_folium(m, height=450, width=None, key="gadm_map")
-                        
-                    except Exception as map_error:
-                        st.warning(f"Map preview unavailable: {str(map_error)[:100]}")
+                    # Add GeoJson layer with interactivity
+                    add_geojson_overlay(
+                        m, geojson_data,
+                        tooltip_fields=tooltip_fields,
+                        tooltip_aliases=tooltip_aliases,
+                        popup_fields=popup_fields,
+                    )
                     
-                    # Store selection in session state
-                    st.session_state.gadm_selection = {
-                        'name': country,
-                        'admin_level': admin_level,
-                        'gdf': gdf  # Store the GeoDataFrame for extraction
-                    }
+                    # Render map
+                    render_map_display(m, key="gadm_map", fit_bounds=gdf.total_bounds)
                     
-                except ValueError as e:
-                    st.error(f"❌ Could not find '{country}'. Check spelling.")
-                    st.caption(f"Error: {str(e)[:200]}")
-                except Exception as e:
-                    st.error(f"❌ Error loading boundary: {str(e)}")
+                except Exception as map_error:
+                    st.warning(f"Map preview unavailable: {str(map_error)[:100]}")
+                
+                # Store selection in session state for export pipeline
+                st.session_state.gadm_selection = {
+                    'name': loaded_country,
+                    'admin_level': loaded_level,
+                    'gdf': gdf
+                }
+                
+            except Exception as e:
+                st.error(f"❌ Error displaying boundary: {str(e)}")
     else:
         st.caption("Enter a country name above to load its boundaries")
 
