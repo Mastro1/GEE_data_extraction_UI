@@ -152,6 +152,7 @@ cython_debug/
 # Agent related
 .agent/
 .gemini/
+.sisyphus/
 
 # App settings
 config/settings.toml
