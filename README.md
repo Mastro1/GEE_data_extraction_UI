@@ -36,6 +36,7 @@ This tool is especially useful for:
 - **Intuitive No-Code GUI**: A polished Streamlit dashboard covering the full extraction workflow from ROI definition to download.
 - **Flexible Region of Interest (ROI) Selection**:
   - **Point Coordinates**: Enter Lat/Lon coordinates directly.
+  - **Google Maps Link**: Paste any Google Maps URL (full or short link) to extract coordinates automatically.
   - **File Upload**: Import Shapefiles (`.shp`), GeoJSON, or KML geometries.
   - **Administrative Boundaries**: Country and province-level selection via **GADM** integration (`pygadm`).
 - **Multiple Export Targets**: Export to **Google Drive** for large batch jobs or download results **locally** for quick samples.
@@ -128,7 +129,7 @@ streamlit run src/interface/app.py
 
 1. **Configure Settings** — Use the sidebar to set your GEE Project ID and default download folders.
 2. **Define WHAT** — Select your satellite dataset (e.g., ERA5-Land Daily) and the specific bands or variables you need.
-3. **Define WHERE** — Enter point coordinates, upload a geometry file (Shapefile, GeoJSON, KML), or pick an administrative boundary using the GADM selector.
+3. **Define WHERE** — Enter point coordinates, paste a Google Maps link, upload a geometry file (Shapefile, GeoJSON, KML), or pick an administrative boundary using the GADM selector.
 4. **Define WHEN** — Set your start/end date range and apply optional seasonal filters (e.g., extract only June–September).
 5. **Verify** — Inspect the auto-rendered map to confirm your ROI is correct.
 6. **Execute** — Click **Save to Drive** for large batch extractions or **Download Locally** for immediate results.
