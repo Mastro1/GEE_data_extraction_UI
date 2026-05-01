@@ -6,7 +6,7 @@ base layers, overlays, rendering via st_folium, and drag-to-resize.
 """
 import folium
 import json
-import streamlit.components.v1 as components
+from jinja2 import Template
 from streamlit_folium import st_folium
 
 
@@ -170,6 +170,8 @@ def render_map(m, key, height=800, width=None, fit_bounds=None):
 
     folium.LayerControl(position="topright", collapsed=False).add_to(m)
 
+    DragHandlePlugin(map_key=key).add_to(m)
+
     return st_folium(m, height=height, width=width, key=key)
 
 
@@ -195,6 +197,8 @@ def render_map_display(m, key, height=800, width=None, fit_bounds=None):
         m.fit_bounds([[bounds[1], bounds[0]], [bounds[3], bounds[2]]])
 
     folium.LayerControl(position="topright", collapsed=False).add_to(m)
+
+    DragHandlePlugin(map_key=key).add_to(m)
 
     st_folium(m, height=height, width=width, key=key, returned_objects=[])
 
@@ -266,39 +270,61 @@ def fetch_gadm_boundaries(country, admin_level):
     return _fetch(country, admin_level)
 
 
-# --- Drag handle JS ---
+class DragHandlePlugin(folium.MacroElement):
+    """Folium plugin that attaches a drag-to-resize handle to its map iframe.
 
-_DRAG_HANDLE_JS = """
-<script>
-(function() {
-    var parentDoc = window.parent.document;
-    var store = (window.parent.__foliumHeights = window.parent.__foliumHeights || {});
-    var DEFAULT_HEIGHT = 450;
-    var MIN_HEIGHT = 200;
-    var MAX_HEIGHT = 800;
+    Injected once per map, eliminating global scripts and cross-map interference.
+    """
+    _template = Template("""
+    {% macro script(this, kwargs) %}
+    (function() {
+        var iframe = window.frameElement;
+        if (!iframe) return;
 
-    function applyHeight(iframe, h) {
-        h = Math.min(Math.max(h, MIN_HEIGHT), MAX_HEIGHT);
-        var wrapper = iframe.parentElement;
-        iframe.style.setProperty('height', h + 'px', 'important');
-        if (wrapper) {
-            wrapper.style.setProperty('height', 'auto', 'important');
-            wrapper.style.setProperty('max-height', 'none', 'important');
-            wrapper.style.setProperty('overflow', 'visible', 'important');
+        var parentDoc = iframe.ownerDocument;
+        var LS_KEY = 'folium_drag_height_{{this._map_key}}';
+        var DEFAULT_HEIGHT = 800;
+        var MIN_HEIGHT = 200;
+        var MAX_HEIGHT = 800;
+
+        function applyHeight(h) {
+            h = Math.min(Math.max(h, MIN_HEIGHT), MAX_HEIGHT);
+            var wrapper = iframe.parentElement;
+            iframe.style.setProperty('height', h + 'px', 'important');
+            if (wrapper) {
+                wrapper.style.setProperty('height', 'auto', 'important');
+                wrapper.style.setProperty('max-height', 'none', 'important');
+                wrapper.style.setProperty('overflow', 'visible', 'important');
+            }
         }
-    }
 
-    var _scanPending = false;
-
-    function attachHandle(iframe) {
-        var saved = store[iframe.src];
-        if (saved) applyHeight(iframe, saved);
-        else applyHeight(iframe, DEFAULT_HEIGHT);
-
-        var next = iframe.nextElementSibling;
-        if (next && next.dataset && next.dataset.resizeHandle === '1') {
-            return;
+        function saveHeight(h) {
+            try {
+                window.parent.localStorage.setItem(LS_KEY, String(h));
+            } catch (e) {}
         }
+
+        function loadHeight() {
+            try {
+                var v = window.parent.localStorage.getItem(LS_KEY);
+                if (v !== null) {
+                    var h = parseInt(v, 10);
+                    if (!isNaN(h)) return h;
+                }
+            } catch (e) {}
+            return DEFAULT_HEIGHT;
+        }
+
+        function removeOldHandle() {
+            var sibling = iframe.nextElementSibling;
+            if (sibling && sibling.dataset && sibling.dataset.resizeHandle === '1') {
+                sibling.remove();
+            }
+        }
+
+        removeOldHandle();
+        applyHeight(loadHeight());
+        iframe.dataset.foliumHandled = '1';
 
         var handle = parentDoc.createElement('div');
         handle.title = 'Drag to resize map';
@@ -323,8 +349,7 @@ _DRAG_HANDLE_JS = """
         iframe.parentNode.insertBefore(handle, iframe.nextSibling);
 
         handle.addEventListener('pointerdown', function(e) {
-            var iframe = handle.previousElementSibling;
-            if (!iframe || iframe.tagName !== 'IFRAME') return;
+            if (!iframe.isConnected) { handle.remove(); return; }
             e.preventDefault();
             handle.setPointerCapture(e.pointerId);
             handle._dragStartY = e.clientY;
@@ -334,12 +359,11 @@ _DRAG_HANDLE_JS = """
 
         handle.addEventListener('pointermove', function(e) {
             if (handle._dragStartY == null) return;
-            var iframe = handle.previousElementSibling;
-            if (!iframe || iframe.tagName !== 'IFRAME') return;
+            if (!iframe.isConnected) { handle.remove(); return; }
             var h = handle._dragStartH + e.clientY - handle._dragStartY;
             h = Math.min(Math.max(h, MIN_HEIGHT), MAX_HEIGHT);
-            applyHeight(iframe, h);
-            store[iframe.src] = h;
+            applyHeight(h);
+            saveHeight(h);
         });
 
         handle.addEventListener('pointerup', function(e) {
@@ -355,37 +379,12 @@ _DRAG_HANDLE_JS = """
             handle._dragStartH = null;
             handle.style.background = '#e8e8e8';
         });
-    }
+    })();
+    {% endmacro %}
+    """)
 
-    function scan() {
-        parentDoc.querySelectorAll('iframe[title*="streamlit_folium"]').forEach(attachHandle);
-    }
+    def __init__(self, map_key):
+        super().__init__()
+        self._name = 'DragHandlePlugin'
+        self._map_key = map_key
 
-    function debouncedScan() {
-        if (_scanPending) return;
-        _scanPending = true;
-        setTimeout(function() { _scanPending = false; scan(); }, 100);
-    }
-
-    scan();
-
-    var observer = new MutationObserver(debouncedScan);
-    observer.observe(parentDoc.body, { childList: true, subtree: true });
-
-    setInterval(scan, 2000);
-})();
-</script>
-"""
-
-
-def inject_drag_handle():
-    """Inject the drag-to-resize handle script for all st_folium maps.
-
-    Adds a styled drag bar below each st_folium map iframe. Uses
-    setPointerCapture() for reliable drag tracking. Maps render at
-    MAX_HEIGHT (800px) but are clipped to DEFAULT_HEIGHT (450px) by
-    default — users drag to reveal more. Height persists across reruns.
-
-    Call once at the end of the main render loop.
-    """
-    components.html(_DRAG_HANDLE_JS, height=0)
