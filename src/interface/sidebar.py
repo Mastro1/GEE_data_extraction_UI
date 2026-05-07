@@ -2,16 +2,23 @@
 Sidebar module for the GEE Data Extractor.
 Contains: Authentication status, Settings popup, Task monitor, History loader.
 """
+import sys
+import json
+import subprocess
 import streamlit as st
 import ee
 from pathlib import Path
 from src.domain.extractors.BaseExtractor import BaseExtractor
 from src.infrastructure.persistence.HistoryManager import HistoryManager
 
+PROJECT_ROOT = Path(__file__).parent.parent.parent
+USER_PREFS_FILE = PROJECT_ROOT / ".cache" / "user_preferences.json"
+
 
 def render(settings_service):
     """Renders the sidebar components."""
     with st.sidebar:
+        render_shortcut_prompt()
         render_update_banner()
         st.header("🎮 Control Center")
         
@@ -217,6 +224,42 @@ def render_history_loader():
         st.session_state['loaded_settings'] = selected_run
         st.success("Settings loaded!")
         st.rerun()
+
+
+def _load_prefs() -> dict:
+    if USER_PREFS_FILE.exists():
+        try:
+            return json.loads(USER_PREFS_FILE.read_text(encoding="utf-8"))
+        except Exception:
+            return {}
+    return {}
+
+
+def _save_pref(key: str, value) -> None:
+    prefs = _load_prefs()
+    prefs[key] = value
+    USER_PREFS_FILE.parent.mkdir(parents=True, exist_ok=True)
+    USER_PREFS_FILE.write_text(json.dumps(prefs, indent=2), encoding="utf-8")
+
+
+def render_shortcut_prompt():
+    """One-time prompt to create a desktop shortcut. Never shown again after answered."""
+    if _load_prefs().get("shortcut_created") is not None:
+        return
+    st.info("Create a desktop shortcut for GEE-UI?", icon="🖥️")
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("Yes please", use_container_width=True, type="primary", key="btn_shortcut_yes"):
+            install_script = PROJECT_ROOT / "install.py"
+            subprocess.Popen([sys.executable, str(install_script), "--create-shortcut-only"])
+            _save_pref("shortcut_created", True)
+            st.success("Shortcut created!")
+            st.rerun()
+    with col2:
+        if st.button("No thanks", use_container_width=True, key="btn_shortcut_no"):
+            _save_pref("shortcut_created", False)
+            st.rerun()
+    st.divider()
 
 
 def render_update_banner():

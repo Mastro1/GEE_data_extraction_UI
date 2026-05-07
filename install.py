@@ -80,8 +80,10 @@ def ask_create_shortcut() -> bool:
         return answer in ("", "y", "yes")
 
 
-def _do_create_shortcut(shortcut_path: Path) -> bool:
-    """Return True if shortcut should be created (missing + user consents)."""
+def _do_create_shortcut(shortcut_path: Path, force: bool = False) -> bool:
+    """Return True if shortcut should be created."""
+    if force:
+        return True
     if shortcut_path.exists():
         print("  Shortcut already exists, skipping.")
         return False
@@ -91,11 +93,11 @@ def _do_create_shortcut(shortcut_path: Path) -> bool:
     return ask_create_shortcut()
 
 
-def create_shortcut_windows():
+def create_shortcut_windows(force: bool = False):
     desktop = get_desktop()
     shortcut_path = desktop / f"{APP_NAME}.lnk"
 
-    if not _do_create_shortcut(shortcut_path):
+    if not _do_create_shortcut(shortcut_path, force=force):
         return
 
     target = PROJECT_ROOT / "run.bat"
@@ -117,11 +119,11 @@ $Shortcut.WindowStyle = 7
     print(f"  Desktop shortcut created: {shortcut_path}")
 
 
-def create_shortcut_mac():
+def create_shortcut_mac(force: bool = False):
     desktop = get_desktop()
     shortcut_path = desktop / f"{APP_NAME}.command"
 
-    if not _do_create_shortcut(shortcut_path):
+    if not _do_create_shortcut(shortcut_path, force=force):
         return
 
     venv_python = get_venv_python()
@@ -135,11 +137,11 @@ cd "{PROJECT_ROOT}"
     print("  Note: double-click the .command file to launch GEE-UI.")
 
 
-def create_shortcut_linux():
+def create_shortcut_linux(force: bool = False):
     desktop = get_desktop()
     shortcut_path = desktop / f"{APP_NAME}.desktop"
 
-    if not _do_create_shortcut(shortcut_path):
+    if not _do_create_shortcut(shortcut_path, force=force):
         return
 
     venv_python = get_venv_python()
@@ -158,22 +160,27 @@ StartupNotify=false
     print(f"  Desktop shortcut created: {shortcut_path}")
 
 
-def create_shortcut():
+def create_shortcut(force: bool = False):
     print("Creating desktop shortcut...")
     system = platform.system()
     if system == "Windows":
-        create_shortcut_windows()
+        create_shortcut_windows(force=force)
     elif system == "Darwin":
-        create_shortcut_mac()
+        create_shortcut_mac(force=force)
     elif system == "Linux":
-        create_shortcut_linux()
+        create_shortcut_linux(force=force)
     else:
         print(f"  Unsupported OS '{system}', skipping shortcut creation.")
 
 
 def main():
+    if "--create-shortcut-only" in sys.argv:
+        create_shortcut(force=True)
+        return
+
     from_runbat = "--from-runbat" in sys.argv
 
+    print_banner()
     print(f"=== GEE-UI Installer ===")
     print(f"Project root: {PROJECT_ROOT}\n")
 
