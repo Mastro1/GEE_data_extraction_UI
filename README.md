@@ -75,15 +75,15 @@ This is the easiest path and requires **no prior Python experience**.
 
 1. **Clone or download** the repository.
 2. **Double-click `run.bat`**.
-   - On first run, it will automatically create a Python virtual environment and install all required dependencies.
-   - On subsequent runs, it will simply activate the environment and launch the app.
+   - On first run, it launches the installer automatically: creates a Python virtual environment, installs all dependencies, and offers to create a desktop shortcut.
+   - On subsequent runs, it simply activates the environment and launches the app.
 3. **Authenticate with Google Earth Engine** (first time only) — a browser window will open automatically asking you to authorize access.
 
-That's it. `run.bat` handles everything.
+That's it. To re-run setup at any time (e.g. after a manual `git pull`), run `python install.py`.
 
 ---
 
-### 🐧🍎 macOS / Linux — Manual Setup
+### 🐧🍎 macOS / Linux — Setup
 
 **1. Clone the Repository**
 ```bash
@@ -91,18 +91,13 @@ git clone https://github.com/Mastro1/GEE_data_extraction_UI.git
 cd GEE_data_extraction_UI
 ```
 
-**2. Create and activate a virtual environment**
+**2. Run the installer**
 ```bash
-python -m venv .venv
-source .venv/bin/activate
+python install.py
 ```
+This creates a virtual environment, installs all dependencies, and offers to create a desktop shortcut.
 
-**3. Install dependencies**
-```bash
-pip install -r requirements.txt
-```
-
-**4. Authenticate with Google Earth Engine** (first time only)
+**3. Authenticate with Google Earth Engine** (first time only)
 ```bash
 python -c "import ee; ee.Authenticate()"
 ```
