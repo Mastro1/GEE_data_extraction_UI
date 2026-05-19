@@ -70,33 +70,21 @@ class UpdateChecker:
                 error=f"Could not reach remote: {e}",
             )
 
-        local_commit = repo.head.commit.hexsha
         try:
-            remote_commit = repo.commit(f"origin/{REMOTE_BRANCH}").hexsha
-        except Exception:
-            return UpdateInfo(
-                update_available=False,
-                current_version=current_version,
-                remote_version="unknown",
-                has_local_changes=has_local_changes,
-                error="Could not resolve origin/dev",
-            )
-
-        if local_commit == remote_commit:
-            return UpdateInfo(
-                update_available=False,
-                current_version=current_version,
-                remote_version=current_version,
-                has_local_changes=has_local_changes,
-            )
-
-        try:
-            remote_version = repo.git.show("origin/dev:VERSION").strip()
+            remote_version = repo.git.show(f"origin/{REMOTE_BRANCH}:VERSION").strip()
         except Exception:
             remote_version = "unknown"
 
+        try:
+            update_available = (
+                tuple(int(x) for x in remote_version.split("."))
+                > tuple(int(x) for x in current_version.split("."))
+            )
+        except ValueError:
+            update_available = False
+
         return UpdateInfo(
-            update_available=True,
+            update_available=update_available,
             current_version=current_version,
             remote_version=remote_version,
             has_local_changes=has_local_changes,
